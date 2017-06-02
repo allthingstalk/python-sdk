@@ -189,11 +189,14 @@ class Device(metaclass=DeviceBase):
 
     def _on_message(self, stream, internal_asset_id, message):
         if internal_asset_id in self._handlers[stream]:
-            if stream == 'command':
-                value = message
-                at = datetime.datetime.now()
+            msg = json.loads(message)
+            if isinstance(msg, dict):
+                msg = {k.lower(): v for k, v in msg.items()}
             else:
-                msg = json.loads(message)
-                at = parse_date(msg['At'])
-                value = msg['Value']
+                msg = {'value': msg}
+            if 'at' in msg and msg['at'] != None:
+                at = parse_date(msg['at'])
+            else:
+                at = datetime.datetime.utcnow()
+            value = msg['value']
             self._handlers[stream][internal_asset_id](self, value, at)
