@@ -53,14 +53,14 @@ class Client(BaseClient):
         def prefix_http(url):
             return url if url.startswith('http') else 'https://%s' % url
 
-        api = prefix_http(api) if api else None
-        http = prefix_http(http) if http else None
+        if api.startswith('http://') or api.startswith('https://'):
+            api = api.split('//', 1)[1]
 
         # HTTP Client
         if http:
-            self.http = http
+            self.http = prefix_http(http)
         elif api:
-            self.http = api
+            self.http = prefix_http(api)
         else:
             raise ValueError('Either api or http must be set.')
 
