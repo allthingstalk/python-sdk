@@ -20,6 +20,7 @@
 
 from . import profiles
 
+
 class Asset:
 
     SENSOR = 'sensor'

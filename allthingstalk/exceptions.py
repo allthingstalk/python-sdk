@@ -18,6 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 class AssetMismatchException(Exception):
     '''Existing asset on the Platform does not match the asset with the same name supplied in a device definition.'''
     pass

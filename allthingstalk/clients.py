@@ -25,6 +25,7 @@ import requests
 
 logger = logging.getLogger('allthingstalk')
 
+
 class BaseClient:
     '''BaseClient is a base class used for implementing AllThingsTalk Platform
     clients, which are used for interfacing the SDK code with the Platform. It
@@ -33,14 +34,11 @@ class BaseClient:
     def _attach_device(self, device):
         pass
 
-
     def get_assets(self, device_id):
         raise NotImplementedError('get_assets not implemented')
 
-
     def create_asset(self, device_id, asset):
         raise NotImplementedError('create_asset not implemented')
-
 
     def publish_asset_state(self, device_id, asset_name, value):
         raise NotImplementedError('publish_asset_state not implemented')
@@ -81,7 +79,6 @@ class Client(BaseClient):
 
         self._devices = {}
 
-
     def _make_mqtt_client(self, host, port, token):
         def on_mqtt_connect(client, userdata, rc):
             logger.debug('MQTT client connected to %s:%s' % (host, port))
@@ -94,11 +91,10 @@ class Client(BaseClient):
 
         def on_mqtt_message(client, userdata, message):
             logger.debug('MQTT client received a message on topic "%s": %s'
-                            % (message.topic, message.payload))
+                         % (message.topic, message.payload))
             parts = message.topic.split('/')
             _, device_id, _, asset_name, stream = parts
             self._devices[device_id]._on_message(stream, asset_name, message.payload)
-
 
         client = paho_mqtt.Client()
         client.username_pw_set(token, token)
@@ -110,7 +106,6 @@ class Client(BaseClient):
         client.loop_start()
         return client
 
-
     def _attach_device(self, device):
         if self.mqtt:
             logger.debug('Client %s attaching device %s' % (self, device.id))
@@ -119,11 +114,9 @@ class Client(BaseClient):
                 self.mqtt.subscribe('device/%s/asset/+/%s' % (device.id, action))
         self._devices[device.id] = device
 
-
     def get_assets(self, device_id):
         return requests.get('%s/device/%s/assets' % (self.http, device_id),
                             headers={'Authorization': 'Bearer %s' % self.token}).json()
-
 
     def create_asset(self, device_id, asset):
         attalk_asset = {
@@ -137,12 +130,10 @@ class Client(BaseClient):
                              headers={'Authorization': 'Bearer %s' % self.token},
                              json=attalk_asset).json()
 
-
     def publish_asset_state(self, device_id, asset_name, value):
-        r = requests.put('%s/device/%s/asset/%s/state' % (self.http, device_id, asset_name),
-                      headers={'Authorization': 'Bearer %s' % self.token},
-                      json={'value': value})
-
+        requests.put('%s/device/%s/asset/%s/state' % (self.http, device_id, asset_name),
+                     headers={'Authorization': 'Bearer %s' % self.token},
+                     json={'value': value})
 
     def __del__(self):
         try:

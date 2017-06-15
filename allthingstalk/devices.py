@@ -28,6 +28,7 @@ import copy
 
 from . import assets
 
+
 # inspired by https://github.com/django/django/blob/master/django/db/models/base.py
 class DeviceBase(type):
     def __new__(cls, name, bases, attrs):
@@ -74,12 +75,10 @@ class DeviceBase(type):
                 new_class.command._add_asset(asset)
                 new_class.event._add_asset(asset)
 
-
         new_class._assets = [value for name, value in attrs.items()
                              if isinstance(value, assets.Asset)]
 
         return new_class
-
 
     class HandlerDecoratorCollection:
 
@@ -89,13 +88,11 @@ class DeviceBase(type):
             self._device_class = device_class
             self._assets = {}
 
-
         def _add_asset(self, asset):
             def decorator(fn):
                 self._device_class._handlers[self._stream][asset._internal_id] = fn
                 return fn
             self._assets[asset._internal_id] = decorator
-
 
         def __getattr__(self, internal_id):
             if internal_id in self._assets:
@@ -152,7 +149,6 @@ class Device(metaclass=DeviceBase):
         if connect and client:
             self.connect()
 
-
     def connect(self, *, client=None, id=None, overwrite_assets=None):
         '''Connects to the device to AllThingsTalk Platform
 
@@ -186,7 +182,6 @@ class Device(metaclass=DeviceBase):
         self.client._attach_device(self)
         self._connected = True
 
-
     def _on_message(self, stream, internal_asset_id, message):
         if internal_asset_id in self._handlers[stream]:
             msg = json.loads(message)
@@ -194,7 +189,7 @@ class Device(metaclass=DeviceBase):
                 msg = {k.lower(): v for k, v in msg.items()}
             else:
                 msg = {'value': msg}
-            if 'at' in msg and msg['at'] != None:
+            if 'at' in msg and msg['at'] is not None:
                 at = parse_date(msg['at'])
             else:
                 at = datetime.datetime.utcnow()
