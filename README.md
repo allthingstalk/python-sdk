@@ -6,11 +6,13 @@ AllThingsTalk Python SDK provides Python APIs to manage and implement AllThingsT
 
 ## Installation
 
-Install using `pip` (still on testing):
+```
+pip install allthingstalk
+```
 
-```
-pip install --extra-index-url https://testpypi.python.org/pypi allthingstalk
-```
+## Documentation
+
+http://docs.allthingstalk.com/developers/libraries/python/
 
 # License
 
