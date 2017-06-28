@@ -6,7 +6,7 @@
 .. _index:
 
 AllThingsTalk Python SDK
-=================
+========================
 
 .. toctree::
    :maxdepth: 2
@@ -43,7 +43,7 @@ With PIP
 
 To install AllThingsTalk Python SDK, run this command in your terminal of choice: ::
 
-  $ pip install allthingstalk-sdk
+  $ pip install allthingstalk
 
 This is the preferred way of obtaining AllThingsTalk SDK.
 
