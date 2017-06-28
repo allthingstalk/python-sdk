@@ -1,0 +1,242 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API &#8212; AllThingsTalk Python SDK 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="AllThingsTalk SDK" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><a class="reference internal" href="index.html#index"><span class="std std-ref">Back to index</span></a></p>
+<div class="section" id="module-allthingstalk">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-allthingstalk" title="Permalink to this headline">¶</a></h1>
+<p>This part of the documentation covers all the interfaces of AllThingsTalk SDK.</p>
+<div class="section" id="assets">
+<span id="api-assets"></span><h2>Assets<a class="headerlink" href="#assets" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="allthingstalk.Asset">
+<em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">Asset</code><span class="sig-paren">(</span><em>*</em>, <em>kind=’sensor’</em>, <em>name=None</em>, <em>title=None</em>, <em>description=”</em>, <em>handler=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/assets.html#Asset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.Asset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.NumberAsset">
+<em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">NumberAsset</code><span class="sig-paren">(</span><em>*</em>, <em>kind=’sensor’</em>, <em>name=None</em>, <em>title=None</em>, <em>description=”</em>, <em>handler=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/assets.html#NumberAsset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.NumberAsset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.IntegerAsset">
+<em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">IntegerAsset</code><span class="sig-paren">(</span><em>*</em>, <em>kind=’sensor’</em>, <em>name=None</em>, <em>title=None</em>, <em>description=”</em>, <em>handler=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/assets.html#IntegerAsset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.IntegerAsset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.StringAsset">
+<em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">StringAsset</code><span class="sig-paren">(</span><em>*</em>, <em>kind=’sensor’</em>, <em>name=None</em>, <em>title=None</em>, <em>description=”</em>, <em>handler=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/assets.html#StringAsset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.StringAsset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.BooleanAsset">
+<em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">BooleanAsset</code><span class="sig-paren">(</span><em>*</em>, <em>kind=’sensor’</em>, <em>name=None</em>, <em>title=None</em>, <em>description=”</em>, <em>handler=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/assets.html#BooleanAsset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.BooleanAsset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.GeoAsset">
+<em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">GeoAsset</code><span class="sig-paren">(</span><em>*</em>, <em>kind=’sensor’</em>, <em>name=None</em>, <em>title=None</em>, <em>description=”</em>, <em>handler=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/assets.html#GeoAsset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.GeoAsset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="clients">
+<span id="api-clients"></span><h2>Clients<a class="headerlink" href="#clients" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="allthingstalk.BaseClient">
+<em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">BaseClient</code><a class="reference internal" href="_modules/allthingstalk/clients.html#BaseClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.BaseClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>BaseClient is a base class used for implementing AllThingsTalk Platform
+clients, which are used for interfacing the SDK code with the Platform. It
+doesn’t implement any of the client methods.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.Client">
+<em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">Client</code><span class="sig-paren">(</span><em>token</em>, <em>*</em>, <em>api=’api.allthingstalk.io’</em>, <em>http=None</em>, <em>mqtt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/clients.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.Client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="devices">
+<span id="api-devices"></span><h2>Devices<a class="headerlink" href="#devices" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="allthingstalk.Device">
+<em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">Device</code><span class="sig-paren">(</span><em>*</em>, <em>client=None</em>, <em>id=None</em>, <em>connect=True</em>, <em>overwrite_assets=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/devices.html#Device"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.Device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Device contains information about assets. It maps to AllThingsTalk
+Platform device resources.</p>
+<dl class="method">
+<dt id="allthingstalk.Device.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>*</em>, <em>client=None</em>, <em>id=None</em>, <em>overwrite_assets=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/devices.html#Device.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.Device.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connects to the device to AllThingsTalk Platform</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>client</strong> (<a class="reference internal" href="#allthingstalk.Client" title="allthingstalk.Client"><em>Client</em></a>) – The client used to interface with the platform</li>
+<li><strong>id</strong> (<em>str</em>) – Device resource id. If supplied, the device will be mapped to the device resource. If None, an attempt will be made to create the device.</li>
+<li><strong>overwrite_assets</strong> (<em>bool</em>) – If <code class="docutils literal"><span class="pre">True</span></code>, asset mismatch between the Platform and device definition will be resolved by configuring local assets on the Platform. If <code class="docutils literal"><span class="pre">False</span></code>, AssetMismatchException will be raised.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#allthingstalk.AssetMismatchException" title="allthingstalk.AssetMismatchException"><strong>AssetMismatchException</strong></a> – if asset mismatch is found between the existing asset on the Platform and an asset definition, and overwrite_assets is <code class="docutils literal"><span class="pre">False</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="exceptions">
+<span id="api-exceptions"></span><h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="allthingstalk.AssetMismatchException">
+<em class="property">exception </em><code class="descclassname">allthingstalk.</code><code class="descname">AssetMismatchException</code><a class="reference internal" href="_modules/allthingstalk/exceptions.html#AssetMismatchException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.AssetMismatchException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Existing asset on the Platform does not match the asset with the same name supplied in a device definition.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="profiles">
+<span id="api-profiles"></span><h2>Profiles<a class="headerlink" href="#profiles" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="allthingstalk.profiles.Profile">
+<em class="property">class </em><code class="descclassname">allthingstalk.profiles.</code><code class="descname">Profile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/profiles.html#Profile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.profiles.Profile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.profiles.NumberProfile">
+<em class="property">class </em><code class="descclassname">allthingstalk.profiles.</code><code class="descname">NumberProfile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/profiles.html#NumberProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.profiles.NumberProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.profiles.IntegerProfile">
+<em class="property">class </em><code class="descclassname">allthingstalk.profiles.</code><code class="descname">IntegerProfile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/profiles.html#IntegerProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.profiles.IntegerProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.profiles.BooleanProfile">
+<em class="property">class </em><code class="descclassname">allthingstalk.profiles.</code><code class="descname">BooleanProfile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/profiles.html#BooleanProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.profiles.BooleanProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.profiles.StringProfile">
+<em class="property">class </em><code class="descclassname">allthingstalk.profiles.</code><code class="descname">StringProfile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/profiles.html#StringProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.profiles.StringProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.profiles.ObjectProfile">
+<em class="property">class </em><code class="descclassname">allthingstalk.profiles.</code><code class="descname">ObjectProfile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/profiles.html#ObjectProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.profiles.ObjectProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="allthingstalk.profiles.GeoProfile">
+<em class="property">class </em><code class="descclassname">allthingstalk.profiles.</code><code class="descname">GeoProfile</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/profiles.html#GeoProfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.profiles.GeoProfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p><a class="reference internal" href="index.html#index"><span class="std std-ref">Back to index</span></a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API</a><ul>
+<li><a class="reference internal" href="#assets">Assets</a></li>
+<li><a class="reference internal" href="#clients">Clients</a></li>
+<li><a class="reference internal" href="#devices">Devices</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#profiles">Profiles</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">AllThingsTalk SDK</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, AllThingsTalk.
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/allthingstalk/python-sdk" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

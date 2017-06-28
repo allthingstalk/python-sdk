@@ -1,0 +1,299 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>AllThingsTalk SDK &#8212; AllThingsTalk Python SDK 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="allthingstalk-sdk">
+<span id="index"></span><h1>AllThingsTalk SDK<a class="headerlink" href="#allthingstalk-sdk" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>AllThingsTalk Python SDK is designed to offer easy programmatic access to <a class="reference external" href="https://maker.allthingstalk.com/">AllThingsTalk Platform</a>. You can use it to implement AllThingsTalk devices on you computer, or on an embedded device like a Raspberry PI.</p>
+<p>Here’s a very simple example to whet your appetite:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="kn">from</span> <span class="nn">allthingstalk</span> <span class="k">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">Device</span><span class="p">,</span> <span class="n">IntegerAsset</span>
+
+<span class="k">class</span> <span class="nc">RandomDevice</span><span class="p">(</span><span class="n">Device</span><span class="p">):</span>
+    <span class="n">random_number</span> <span class="o">=</span> <span class="n">IntegerAsset</span><span class="p">()</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s1">&#39;your_device_token&#39;</span><span class="p">)</span>
+<span class="n">device</span> <span class="o">=</span> <span class="n">RandomDevice</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;your_device_id&#39;</span><span class="p">)</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">device</span><span class="o">.</span><span class="n">random_number</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This code creates an asset named <cite>random_number</cite> on the device identified by <cite>your_device_id</cite>, using <cite>your_device_token</cite>. When that’s done, it repeatedly sets the asset’s value to random numbers between 1 and 100.</p>
+</div>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>AllThingsTalk Python SDK is a Python 3 library, so make sure you <a class="reference external" href="https://www.python.org/downloads">have Python 3 installed</a>. Python 2 won’t work.</p>
+<div class="section" id="with-pip">
+<h2>With PIP<a class="headerlink" href="#with-pip" title="Permalink to this headline">¶</a></h2>
+<p>To install AllThingsTalk Python SDK, run this command in your terminal of choice:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install allthingstalk-sdk
+</pre></div>
+</div>
+<p>This is the preferred way of obtaining AllThingsTalk SDK.</p>
+</div>
+<div class="section" id="from-the-source">
+<h2>From the source<a class="headerlink" href="#from-the-source" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is somewhat advanced. Don’t use if installing with PIP will do.</p>
+</div>
+<p>AllThingsTalk SDK is developed in the open <a class="reference external" href="https://github.com/allthingstalk/python-sdk">on GitHub</a>, where the code is always available.</p>
+<p>You can clone the public repository with this command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ git clone git://github.com/allthingstalk/python-sdk.git
+</pre></div>
+</div>
+<p>Or, download the tarball:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ curl -OL https://github.com/allthingstalk/python-sdk/tarball/master
+# optionally, zipball is also available (for Windows users).
+</pre></div>
+</div>
+<p>Once you have a copy of the source, you can embed it in your own Python package, or install it into your site-packages easily with:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py install
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="tutorial">
+<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
+<p>Some python knowledge <em>is</em> going to be required for using the SDK, but you should be OK with the basics. If you have no prior experience with programming in Python, you should check out <a class="reference external" href="https://docs.python.org/3/tutorial/index.html">The Python Tutorial</a>.</p>
+<div class="section" id="defining-devices">
+<h2>Defining devices<a class="headerlink" href="#defining-devices" title="Permalink to this headline">¶</a></h2>
+<p>Device definition takes design cues from Django models. If you are familiar with that - awesome, you’ll feel right at home - if not, don’t worry, you’ll be grokking them in no time. Let’s do another example and look at it more closely.</p>
+<div class="highlight-default" id="weather-station"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WeatherStation</span><span class="p">(</span><span class="n">Device</span><span class="p">):</span>
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">NumberAsset</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;°C&#39;</span><span class="p">)</span>
+    <span class="n">forecast</span> <span class="o">=</span> <span class="n">StringAsset</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Asset</span><span class="o">.</span><span class="n">VIRTUAL</span><span class="p">)</span>
+    <span class="n">reset</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Asset</span><span class="o">.</span><span class="n">ACTUATOR</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Each device you create will subclass AllThingsTalk <a class="reference internal" href="api.html#allthingstalk.Device" title="allthingstalk.Device"><code class="xref py py-class docutils literal"><span class="pre">Device</span></code></a>. Device assets are defined as class attributes.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In the examples, it’s assumed that all of <cite>allthingstalk</cite> is imported into the current package, i.e. <code class="docutils literal"><span class="pre">from</span> <span class="pre">allthingstalk</span> <span class="pre">import</span> <span class="pre">*</span></code>.</p>
+</div>
+<p>We’re defining a device called <cite>WeatherStation</cite>, which has three assets: <cite>temperature</cite>, <cite>forecast</cite>, and <cite>reset</cite>. At this moment, we are not concerning ourselves with how their values are going to be obtained, but how they are going to be modeled in AllThingsTalk Platform.</p>
+<p>The assets in this example have different types: <a class="reference internal" href="api.html#allthingstalk.NumberAsset" title="allthingstalk.NumberAsset"><code class="xref py py-class docutils literal"><span class="pre">NumberAsset</span></code></a>, <a class="reference internal" href="api.html#allthingstalk.StringAsset" title="allthingstalk.StringAsset"><code class="xref py py-class docutils literal"><span class="pre">StringAsset</span></code></a>, and <a class="reference internal" href="api.html#allthingstalk.BooleanAsset" title="allthingstalk.BooleanAsset"><code class="xref py py-class docutils literal"><span class="pre">BooleanAsset</span></code></a>. To see other available asset types, you can jump to <a class="reference internal" href="api.html#api-assets"><span class="std std-ref">Assets</span></a>. They are also of different <a class="reference external" href="http://docs.allthingstalk.com/cloud/concepts/assets/#types">kinds</a>. <cite>Temperature</cite> is a <code class="docutils literal"><span class="pre">SENSOR</span></code>, which is the default asset kind, <cite>forecast</cite> is a <code class="docutils literal"><span class="pre">VIRTUAL</span></code>, and <cite>reset</cite> is an <code class="docutils literal"><span class="pre">ACTUATOR</span></code>.</p>
+<p>Some asset types, like <a class="reference internal" href="api.html#allthingstalk.NumberAsset" title="allthingstalk.NumberAsset"><code class="xref py py-class docutils literal"><span class="pre">NumberAsset</span></code></a>, can be configured with type specific properties - extras <a class="footnote-reference" href="#extras" id="id1">[1]</a>. Here, we’re configuring <cite>temperature’s</cite> <code class="docutils literal"><span class="pre">unit</span></code> to <code class="docutils literal"><span class="pre">'°C'</span></code>, so that there’s no ambiguity about the chosen temperature scale <a class="footnote-reference" href="#temp-unit" id="id2">[2]</a>.</p>
+</div>
+<div class="section" id="connecting-to-the-cloud">
+<h2>Connecting to the cloud<a class="headerlink" href="#connecting-to-the-cloud" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#weather-station"><span class="std std-ref">WeatherStation</span></a> we just defined won’t do anything on its own. It needs to be able to connect to the cloud and bind itself to a device resource identified by an <cite>id</cite>.</p>
+<p>To make this happen, we need to use a <a class="reference internal" href="api.html#api-clients"><span class="std std-ref">client</span></a> with a <cite>WeatherStation</cite> instance.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s1">&#39;your_token&#39;</span><span class="p">)</span>
+<span class="n">weather</span> <span class="o">=</span> <span class="n">WeatherStation</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once <code class="docutils literal"><span class="pre">weather</span></code> is initialized, the SDK will take the assets from <cite>WeatherStation</cite> definition and use them to configure the device’s assets on the Platform. If <cite>id</cite> is not supplied, a new device will be created first.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Not all clients can create devices. In general, you shouldn’t assume that all of <a class="reference internal" href="api.html#allthingstalk.BaseClient" title="allthingstalk.BaseClient"><code class="xref py py-class docutils literal"><span class="pre">BaseClient</span></code></a> methods will be implemented by a given client. Also, when using <a class="reference internal" href="api.html#allthingstalk.Client" title="allthingstalk.Client"><code class="xref py py-class docutils literal"><span class="pre">Client</span></code></a> - which does implement most of the client methods - you should keep in mind that the supplied token might not offer sufficient permissions.</p>
+</div>
+<p>By default a <a class="reference internal" href="api.html#allthingstalk.AssetMismatchException" title="allthingstalk.AssetMismatchException"><code class="xref py py-class docutils literal"><span class="pre">AssetMismatchException</span></code></a> will be thrown if there’s a type or kind mismatch between the existing assets on the Platform and the assets defined for the device identified by the same name. To overwrite existing assets, initialize the device with <code class="docutils literal"><span class="pre">overwrite_assets=True</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">weather</span> <span class="o">=</span> <span class="n">WeatherStation</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">overwrite_assets</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="postponed-connection">
+<h3>Postponed connection<a class="headerlink" href="#postponed-connection" title="Permalink to this headline">¶</a></h3>
+<p>If you don’t want to connect immediately after creating a device, you can set <code class="docutils literal"><span class="pre">connect</span></code> argument to <code class="docutils literal"><span class="pre">False</span></code>, and use the device’s <a class="reference internal" href="api.html#allthingstalk.Device.connect" title="allthingstalk.Device.connect"><code class="xref py py-class docutils literal"><span class="pre">connect</span></code></a> method to connect later. All the arguments available to <a class="reference internal" href="api.html#allthingstalk.Device" title="allthingstalk.Device"><code class="xref py py-class docutils literal"><span class="pre">Device</span></code></a> initializers are available to connect as well.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">weather</span> <span class="o">=</span> <span class="n">WeatherStation</span><span class="p">(</span><span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="o">...</span>
+<span class="c1"># other code</span>
+<span class="o">...</span>
+<span class="n">weather</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="adding-assets">
+<h2>Adding assets<a class="headerlink" href="#adding-assets" title="Permalink to this headline">¶</a></h2>
+<p>During device development, you might need to append assets to a device after it’s been created. Doing this is as simple as stopping the program, extending the device class with the needed assets (in this case <cite>humidity</cite> and <cite>alert</cite>) and restarting.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WeatherStation</span><span class="p">(</span><span class="n">Device</span><span class="p">):</span>
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">NumberAsset</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;°C&#39;</span><span class="p">)</span>
+<span class="hll">    <span class="n">humidity</span> <span class="o">=</span> <span class="n">NumberAsset</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;%&#39;</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">alert</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">()</span>
+</span>    <span class="n">forecast</span> <span class="o">=</span> <span class="n">StringAsset</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Asset</span><span class="o">.</span><span class="n">VIRTUAL</span><span class="p">)</span>
+    <span class="n">reset</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Asset</span><span class="o">.</span><span class="n">ACTUATOR</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="publishing-values">
+<h2>Publishing values<a class="headerlink" href="#publishing-values" title="Permalink to this headline">¶</a></h2>
+<p>Once your device is connected, you’re ready to publish values to the Platform. To publish a value to an asset resource and set its state, simply assign the value to the corresponding field of your <a class="reference internal" href="api.html#allthingstalk.Device" title="allthingstalk.Device"><code class="xref py py-class docutils literal"><span class="pre">Device</span></code></a> instance.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">weather</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="mf">21.3</span>
+<span class="n">weather</span><span class="o">.</span><span class="n">humidity</span> <span class="o">=</span> <span class="mf">3.1</span>
+<span class="n">weather</span><span class="o">.</span><span class="n">alert</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+</div>
+<p>There is no special “device loop”. You can use pure Python and any of the awesome Python libraries to implement your business logic. For example, with <a class="reference external" href="http://wiki.seeed.cc/Grove-Temperature_and_Humidity_Sensor_Pro/">GrovePi Temperature and Humidity Sensor Pro</a>, you could implement the <cite>WeatherDevice</cite> for real as simply as:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...</span>
+
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+    <span class="n">temperature</span><span class="p">,</span> <span class="n">humidity</span> <span class="o">=</span> <span class="n">grovepi</span><span class="o">.</span><span class="n">dht</span><span class="p">(</span><span class="n">SENSOR_PIN</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">weather</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="n">temperature</span>
+    <span class="n">weather</span><span class="o">.</span><span class="n">humidity</span> <span class="o">=</span> <span class="n">humidity</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="listening-to-commands">
+<h2>Listening to commands<a class="headerlink" href="#listening-to-commands" title="Permalink to this headline">¶</a></h2>
+<p>TODO: No token auth with MQTT yet</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@WeatherStation</span><span class="o">.</span><span class="n">on</span><span class="o">.</span><span class="n">reset</span>
+<span class="k">def</span> <span class="nf">on_reset</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">asset</span><span class="p">):</span>
+    <span class="n">reset_my_weather_station</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<p>If you are looking for information on a specific function, class, or method,
+this part of the documentation is for you.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#assets">Assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#clients">Clients</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#devices">Devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#exceptions">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#profiles">Profiles</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="extras" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Each predefined asset type maps to a predefined asset <a class="reference internal" href="api.html#api-profiles"><span class="std std-ref">profile</span></a>, which in turn maps to <a class="reference external" href="http://docs.allthingstalk.com/cloud/concepts/assets/profiles/">AllThingsTalk asset profiles</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="temp-unit" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Defining the temperature scale is of course optional - the platform will work just fine without it. Nevertheless, specifying units for physical measures is a good practice, and as a bonus, we’ll be able to see the <code class="docutils literal"><span class="pre">unit</span></code> on the Platform interface.</td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AllThingsTalk SDK</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#with-pip">With PIP</a></li>
+<li><a class="reference internal" href="#from-the-source">From the source</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tutorial">Tutorial</a><ul>
+<li><a class="reference internal" href="#defining-devices">Defining devices</a></li>
+<li><a class="reference internal" href="#connecting-to-the-cloud">Connecting to the cloud</a><ul>
+<li><a class="reference internal" href="#postponed-connection">Postponed connection</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#adding-assets">Adding assets</a></li>
+<li><a class="reference internal" href="#publishing-values">Publishing values</a></li>
+<li><a class="reference internal" href="#listening-to-commands">Listening to commands</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#api-reference">API Reference</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="api.html" title="next chapter">API</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, AllThingsTalk.
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/allthingstalk/python-sdk" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

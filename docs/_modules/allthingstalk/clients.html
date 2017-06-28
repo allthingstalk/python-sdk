@@ -1,0 +1,229 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>allthingstalk.clients &#8212; AllThingsTalk Python SDK 0.1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for allthingstalk.clients</h1><div class="highlight"><pre>
+<span></span><span class="c1">#    _   _ _ _____ _    _              _____     _ _     ___ ___  _  __</span>
+<span class="c1">#   /_\ | | |_   _| |_ (_)_ _  __ _ __|_   _|_ _| | |__ / __|   \| |/ /</span>
+<span class="c1">#  / _ \| | | | | | &#39; \| | &#39; \/ _` (_-&lt; | |/ _` | | / / \__ \ |) | &#39; &lt;</span>
+<span class="c1"># /_/ \_\_|_| |_| |_||_|_|_||_\__, /__/ |_|\__,_|_|_\_\ |___/___/|_|\_\</span>
+<span class="c1">#                             |___/</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright 2017 AllThingsTalk</span>
+<span class="c1">#</span>
+<span class="c1"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1"># you may not use this file except in compliance with the License.</span>
+<span class="c1"># You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1"># http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1"># Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1"># See the License for the specific language governing permissions and</span>
+<span class="c1"># limitations under the License.</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">paho.mqtt.client</span> <span class="k">as</span> <span class="nn">paho_mqtt</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;allthingstalk&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="BaseClient"><a class="viewcode-back" href="../../api.html#allthingstalk.BaseClient">[docs]</a><span class="k">class</span> <span class="nc">BaseClient</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;BaseClient is a base class used for implementing AllThingsTalk Platform</span>
+<span class="sd">    clients, which are used for interfacing the SDK code with the Platform. It</span>
+<span class="sd">    doesn&#39;t implement any of the client methods.&#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">_attach_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">get_assets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;get_assets not implemented&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create_asset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;create_asset not implemented&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">publish_asset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;publish_asset_state not implemented&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../api.html#allthingstalk.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="n">BaseClient</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="s1">&#39;api.allthingstalk.io&#39;</span><span class="p">,</span>
+                 <span class="n">http</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mqtt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
+
+        <span class="k">def</span> <span class="nf">prefix_http</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">url</span> <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;https://</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">url</span>
+
+        <span class="k">if</span> <span class="n">api</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;http://&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">api</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;https://&#39;</span><span class="p">):</span>
+            <span class="n">api</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;//&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># HTTP Client</span>
+        <span class="k">if</span> <span class="n">http</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">http</span> <span class="o">=</span> <span class="n">prefix_http</span><span class="p">(</span><span class="n">http</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">api</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">http</span> <span class="o">=</span> <span class="n">prefix_http</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Either api or http must be set.&#39;</span><span class="p">)</span>
+
+        <span class="c1"># MQTT Client</span>
+        <span class="k">if</span> <span class="n">mqtt</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">mqtt</span><span class="p">:</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">mqtt</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[:</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">mqtt</span><span class="p">,</span> <span class="s1">&#39;1883&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_mqtt_client</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">api</span><span class="p">:</span>
+            <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span> <span class="o">=</span> <span class="n">api</span><span class="p">,</span> <span class="s1">&#39;1883&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_mqtt_client</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">_make_mqtt_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">on_mqtt_connect</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;MQTT client connected to </span><span class="si">%s</span><span class="s1">:</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+
+        <span class="k">def</span> <span class="nf">on_mqtt_disconnect</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;MQTT client disconnected with status </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">rc</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">on_mqtt_subscribe</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">mid</span><span class="p">,</span> <span class="n">granted_qos</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="k">def</span> <span class="nf">on_mqtt_message</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;MQTT client received a message on topic &quot;</span><span class="si">%s</span><span class="s1">&quot;: </span><span class="si">%s</span><span class="s1">&#39;</span>
+                         <span class="o">%</span> <span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">payload</span><span class="p">))</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">topic</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">,</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">parts</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">[</span><span class="n">device_id</span><span class="p">]</span><span class="o">.</span><span class="n">_on_message</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">payload</span><span class="p">)</span>
+
+        <span class="n">client</span> <span class="o">=</span> <span class="n">paho_mqtt</span><span class="o">.</span><span class="n">Client</span><span class="p">()</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">username_pw_set</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">on_connect</span> <span class="o">=</span> <span class="n">on_mqtt_connect</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">on_disconnect</span> <span class="o">=</span> <span class="n">on_mqtt_disconnect</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">on_message</span> <span class="o">=</span> <span class="n">on_mqtt_message</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">on_subscribe</span> <span class="o">=</span> <span class="n">on_mqtt_subscribe</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">),</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="n">client</span><span class="o">.</span><span class="n">loop_start</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">client</span>
+
+    <span class="k">def</span> <span class="nf">_attach_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mqtt</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Client </span><span class="si">%s</span><span class="s1"> attaching device </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;feed&#39;</span><span class="p">,</span> <span class="s1">&#39;command&#39;</span><span class="p">]:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Subscribing to </span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">s </span><span class="si">%s</span><span class="s1">s&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">action</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mqtt</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="s1">&#39;device/</span><span class="si">%s</span><span class="s1">/asset/+/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">action</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">[</span><span class="n">device</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">device</span>
+
+    <span class="k">def</span> <span class="nf">get_assets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/device/</span><span class="si">%s</span><span class="s1">/assets&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">,</span> <span class="n">device_id</span><span class="p">),</span>
+                            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Bearer </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">})</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">create_asset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset</span><span class="p">):</span>
+        <span class="n">attalk_asset</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="n">asset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="s1">&#39;Title&#39;</span><span class="p">:</span> <span class="n">asset</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">&#39;Description&#39;</span><span class="p">:</span> <span class="n">asset</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="s1">&#39;Is&#39;</span><span class="p">:</span> <span class="n">asset</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span>
+            <span class="s1">&#39;Profile&#39;</span><span class="p">:</span> <span class="n">asset</span><span class="o">.</span><span class="n">profile</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/device/</span><span class="si">%s</span><span class="s1">/assets&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">,</span> <span class="n">device_id</span><span class="p">),</span>
+                             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Bearer </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">},</span>
+                             <span class="n">json</span><span class="o">=</span><span class="n">attalk_asset</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">publish_asset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/device/</span><span class="si">%s</span><span class="s1">/asset/</span><span class="si">%s</span><span class="s1">/state&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">),</span>
+                     <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Bearer </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">},</span>
+                     <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">mqtt</span><span class="o">.</span><span class="n">loop_stop</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, AllThingsTalk.
+      
+    </div>
+
+    
+    <a href="https://github.com/allthingstalk/python-sdk" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>
