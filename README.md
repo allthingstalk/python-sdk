@@ -12,7 +12,7 @@ pip install allthingstalk
 
 ## Documentation
 
-http://docs.allthingstalk.com/developers/libraries/python/
+https://allthingstalk.github.io/python-sdk/
 
 # License
 
