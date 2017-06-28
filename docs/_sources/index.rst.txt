@@ -5,7 +5,7 @@
 
 .. _index:
 
-AllThingsTalk SDK
+AllThingsTalk Python SDK
 =================
 
 .. toctree::
