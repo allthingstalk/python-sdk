@@ -16,5 +16,21 @@ setup(
         'requests',
         'python-dateutil',
         'six'
+    ],
+    classifiers=[
+        'Development Status :: 4 - Beta',
+        'Environment :: Console',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache Software License',
+        'Operating System :: MacOS :: MacOS X',
+        'Operating System :: Microsoft :: Windows',
+        'Operating System :: POSIX',
+        'Topic :: Internet',
+        'Topic :: Software Development :: Libraries',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3 :: Only'
     ]
 )
