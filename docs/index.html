@@ -184,10 +184,19 @@
 </div>
 <div class="section" id="listening-to-commands">
 <h2>Listening to commands<a class="headerlink" href="#listening-to-commands" title="Permalink to this headline">¶</a></h2>
-<p>TODO: No token auth with MQTT yet</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@WeatherStation</span><span class="o">.</span><span class="n">on</span><span class="o">.</span><span class="n">reset</span>
-<span class="k">def</span> <span class="nf">on_reset</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">asset</span><span class="p">):</span>
+<p>To listen for commands from <cite>reset</cite> actuator, do the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@WeatherStation</span><span class="o">.</span><span class="n">command</span><span class="o">.</span><span class="n">reset</span>
+<span class="k">def</span> <span class="nf">on_reset</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">at</span><span class="p">):</span>
     <span class="n">reset_my_weather_station</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="listening-to-feeds">
+<h2>Listening to feeds<a class="headerlink" href="#listening-to-feeds" title="Permalink to this headline">¶</a></h2>
+<p>If you’d like to implement a separate program to listen to feeds coming from the weather station, specifically from <cite>temperature</cite> sensor:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@WeatherStation</span><span class="o">.</span><span class="n">feed</span><span class="o">.</span><span class="n">temperature</span>
+<span class="k">def</span> <span class="nf">on_reset</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">at</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Received </span><span class="si">%s</span><span class="s1"> at </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">at</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -247,6 +256,7 @@ this part of the documentation is for you.</p>
 <li><a class="reference internal" href="#adding-assets">Adding assets</a></li>
 <li><a class="reference internal" href="#publishing-values">Publishing values</a></li>
 <li><a class="reference internal" href="#listening-to-commands">Listening to commands</a></li>
+<li><a class="reference internal" href="#listening-to-feeds">Listening to feeds</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#api-reference">API Reference</a></li>

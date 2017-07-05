@@ -166,13 +166,21 @@ There is no special "device loop". You can use pure Python and any of the awesom
 Listening to commands
 ---------------------
 
-TODO: No token auth with MQTT yet
+To listen for commands from `reset` actuator, do the following: ::
 
-::
-
-   @WeatherStation.on.reset
-   def on_reset(value, asset):
+   @WeatherStation.command.reset
+   def on_reset(device, value, at):
        reset_my_weather_station()
+
+
+Listening to feeds
+------------------
+
+If you'd like to implement a separate program to listen to feeds coming from the weather station, specifically from `temperature` sensor: ::
+
+   @WeatherStation.feed.temperature
+   def on_reset(device, value, at):
+       print('Received %s at %s' % (value, at))
 
 ---------------
 
