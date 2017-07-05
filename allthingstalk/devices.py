@@ -184,7 +184,7 @@ class Device(metaclass=DeviceBase):
 
     def _on_message(self, stream, internal_asset_id, message):
         if internal_asset_id in self._handlers[stream]:
-            msg = json.loads(message)
+            msg = json.loads(message.decode('utf-8'))
             if isinstance(msg, dict):
                 msg = {k.lower(): v for k, v in msg.items()}
             else:
