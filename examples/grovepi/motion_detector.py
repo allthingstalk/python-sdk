@@ -31,8 +31,9 @@ from allthingstalk import Device, BooleanAsset, Client, Asset
 
 # Parameters used to authorize and identify your device
 # Note: DEVICE_TOKEN and DEVICE_ID are found on maker.allthingstalk.com
-deviceToken = 'maker:4ObWht29bfsnW1VeVzx9yeXy1X5wWAtRUDPt6YK0'
-deviceId = 'StsNx5D2Y5GPe1NZjmBb3N61'
+# Note: DEVICE_TOKEN and DEVICE_ID are found on maker.allthingstalk.com
+deviceToken = '<DEVICE_TOKEN>'
+deviceId = '<DEVICE_ID>'
 
 # Create your Motion detector device with motion sensor asset and diode asset (diode is set as actuator)
 class MotionDetector(Device):

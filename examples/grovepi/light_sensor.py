@@ -31,8 +31,8 @@ from allthingstalk import Device, NumberAsset, Client
 
 # Parameters used to authorize and identify your device
 # Note: DEVICE_TOKEN and DEVICE_ID are found on maker.allthingstalk.com
-deviceToken = 'maker:4ObWht29bfsnW1VeVzx9yeXy1X5wWAtRUDPt6YK0'
-deviceId = 'StsNx5D2Y5GPe1NZjmBb3N61'
+deviceToken = '<DEVICE_TOKEN>'
+deviceId = '<DEVICE_ID>'
 
 # Create your Light Sensor device with light asset and set lx as a measuring unit (Lux)
 class LightSensor(Device):
