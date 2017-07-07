@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #    _   _ _ _____ _    _              _____     _ _     ___ ___  _  __
 #   /_\ | | |_   _| |_ (_)_ _  __ _ __|_   _|_ _| | |__ / __|   \| |/ /
 #  / _ \| | | | | | ' \| | ' \/ _` (_-< | |/ _` | | / / \__ \ |) | ' <
@@ -30,35 +32,34 @@ import grovepi
 from allthingstalk import Device, NumberAsset, Client
 
 # Parameters used to authorize and identify your device
-# Note: DEVICE_TOKEN and DEVICE_ID are found on maker.allthingstalk.com
-deviceToken = '<DEVICE_TOKEN>'
-deviceId = '<DEVICE_ID>'
+# Get them on maker.allthingstalk.com
+DEVICE_TOKEN = '<DEVICE_TOKEN>'
+DEVICE_ID = '<DEVICE_ID>'
 
-# Create your Light Sensor device with light asset and set lx as a measuring unit (Lux)
+
 class LightSensor(Device):
-    light = NumberAsset(unit='lx')
+    '''Light sensing device with a single asset that measures
+    illuminance.'''
+    light = NumberAsset(unit='lx')  # lx stands for Lux
 
-# Authorize and connect your device with cloud
-client = Client(deviceToken)
-device = LightSensor(client=client, id=deviceId)
+
+# Authorize and connect your device with the Cloud
+client = Client(DEVICE_TOKEN)
+device = LightSensor(client=client, id=DEVICE_ID)
 
 # Pin number on your shield where light sensor is connected
-lightSensorPin = 0
+light_sensor_pin = 0
 
 # Light sensor's pin needs to be in INPUT mode
-grovepi.pinMode(lightSensorPin, 'INPUT')
+grovepi.pinMode(light_sensor_pin, 'INPUT')
 
 # Run as long as the device is turned on
 while True:
-	# Read state of the light sensor
-    lightValue = grovepi.analogRead(lightSensorPin)
+    # Read state of the light sensor
+    light_value = grovepi.analogRead(light_sensor_pin)
     # Send value from light sensor to the cloud
-    device.light = lightValue
+    device.light = light_value
     # Log the value to standard output
-    print('LightSensor value: %s' % lightValue)
+    print('Light sensor value: %s' % light_value)
     # Sleep for 1 second then do it all over again
     time.sleep(1)
-
-
-
-

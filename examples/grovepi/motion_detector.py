@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #    _   _ _ _____ _    _              _____     _ _     ___ ___  _  __
 #   /_\ | | |_   _| |_ (_)_ _  __ _ __|_   _|_ _| | |__ / __|   \| |/ /
 #  / _ \| | | | | | ' \| | ' \/ _` (_-< | |/ _` | | / / \__ \ |) | ' <
@@ -30,63 +32,81 @@ import grovepi
 from allthingstalk import Device, BooleanAsset, Client, Asset
 
 # Parameters used to authorize and identify your device
-# Note: DEVICE_TOKEN and DEVICE_ID are found on maker.allthingstalk.com
-# Note: DEVICE_TOKEN and DEVICE_ID are found on maker.allthingstalk.com
-deviceToken = '<DEVICE_TOKEN>'
-deviceId = '<DEVICE_ID>'
+# Get them on maker.allthingstalk.com
+DEVICE_TOKEN = '<DEVICE_TOKEN>'
+DEVICE_ID = '<DEVICE_ID>'
 
-# Create your Motion detector device with motion sensor asset and diode asset (diode is set as actuator)
+
 class MotionDetector(Device):
-    motionSensor = BooleanAsset()
-    diode = BooleanAsset(kind=Asset.ACTUATOR)
+    '''Motion sensing device consisting of a motion sensor represented as
+    a boolean asset, and an LED that can be actuated from the Cloud.'''
+    motion_sensor = BooleanAsset()
+    led = BooleanAsset(kind=Asset.ACTUATOR)
 
-# Authorize and connect your device with cloud
-client = Client(deviceToken)
-device = MotionDetector(client=client, id=deviceId)
 
-# Pin numbers on your shield where motion sensor and diode are connected
-motionSensorPin = 3
-diodePin = 4
+# Authorize and connect your device with the Cloud
+client = Client(DEVICE_TOKEN)
+device = MotionDetector(client=client, id=DEVICE_ID)
+
+# Pin numbers on your shield where motion sensor and led are connected
+motion_sensor_pin = 3
+led_pin = 4
 
 # Motion sensor's pin needs to be in INPUT mode
-grovepi.pinMode(motionSensorPin, "INPUT")
-# Diode's pin needs to be in OUTPUT mode
-grovepi.pinMode(diodePin, "OUTPUT")
+grovepi.pinMode(motion_sensor_pin, 'INPUT')
+# Led's pin needs to be in OUTPUT mode
+grovepi.pinMode(led_pin, 'OUTPUT')
 
-previousMotionSensorState = False
 
-# Setup listener for commands sent from cloud for your diode
-@MotionDetector.command.diode
-def on_diode(device, value, at):
-    if value == True:
-        # If command is True set value 1 on diode pin, turning diode on
-        grovepi.digitalWrite(diodePin, 1)
-        # Send value to the cloud to reflect physical state of the diode
-        device.diode = True
+# Setup listener for commands sent from the Cloud for your LED
+@MotionDetector.command.led
+def on_led(device, value, at):
+    if value:
+        # If command is True set value 1 on led pin, turning the led on
+        grovepi.digitalWrite(led_pin, 1)
+        # Send value to the cloud to reflect physical state of the led
+        device.led = True
     else:
-        # If command is other than True set value 0 on diode pin, turning diode off
-        grovepi.digitalWrite(diodePin, 0)
-        # Send value to the cloud to reflect physical state of the diode
-        device.diode = False
+        # If command is other than True set value 0 on led pin, turning led off
+        grovepi.digitalWrite(led_pin, 0)
+        # Send value to the cloud to reflect physical state of the led
+        device.led = False
 
-    print('Diode state is updated')
+    print('Led state updated.')
+
+
+# Motion sensor will send 1 (one) every time it detects motion.
+# For continuous motion, it will send many ones. We don't want to
+# send multiple state updates for a single movement, even if it
+# lasts for a few seconds - instead, we'd like to be able to tell
+# when separate movement sequences occur. This is why we need to
+# keep track of movements and be able to tell if data received from
+# the sensor is only indicating a continuation of an already identified
+# movement, or if it marks the start of a new motion that we want
+# to send to the Cloud.
+previous_motion_sensor_state = False
 
 # Run as long as the device is turned on
 while True:
     # Read state of the motion sensor sensor
-    motionSensorState = grovepi.digitalRead(motionSensorPin)
-    if motionSensorState == 1:
-    	if previousMotionSensorState == False:
-            # Send True value to the cloud, indicating that motion sensor detected movement
-    		device.motionSensor = True
+    motion_sensor_state = grovepi.digitalRead(motion_sensor_pin)
+    if motion_sensor_state == 1:
+        # Let's just publish new motions:
+        if not previous_motion_sensor_state:
+            # Send True value to the cloud, indicating that motion sensor
+            # has detected movement.
+            device.motion_sensor = True
             # Log change to standard output
-    		print( "Motion detected" )
-    		previousMotionSensorState = True
-    elif previousMotionSensorState == True:
-        # Send False value to the cloud, indicating that motion sensor is not detecting any movement
-    	device.motionSensor = False
+            print('Motion detected.')
+            previous_motion_sensor_state = True
+    # When motion stops, we publish that only once as well.
+    elif previous_motion_sensor_state:
+        # Send False value to the cloud, indicating that motion sensor
+        # has not detected movement.
+        device.motion_sensor = False
         # Log change to standard output
-    	print( "No more motion" )
-    	previousMotionSensorState = False
-    # Sleep for .3 seconds then do it all over again
-    time.sleep(.3)
+        print('No more motion detected.')
+        previous_motion_sensor_state = False
+
+    # Sleep for 0.3 seconds then do it all over again
+    time.sleep(0.3)

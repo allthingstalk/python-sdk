@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #    _   _ _ _____ _    _              _____     _ _     ___ ___  _  __
 #   /_\ | | |_   _| |_ (_)_ _  __ _ __|_   _|_ _| | |__ / __|   \| |/ /
 #  / _ \| | | | | | ' \| | ' \/ _` (_-< | |/ _` | | / / \__ \ |) | ' <
@@ -30,47 +32,57 @@ import grovepi
 from allthingstalk import Device, BooleanAsset, Client
 
 # Parameters used to authorize and identify your device
-# Note: DEVICE_TOKEN and DEVICE_ID are found on maker.allthingstalk.com
-deviceToken = '<DEVICE_TOKEN>'
-deviceId = '<DEVICE_ID>'
+# Get them on maker.allthingstalk.com
+DEVICE_TOKEN = '<DEVICE_TOKEN>'
+DEVICE_ID = '<DEVICE_ID>'
 
-# Create your Smart Doorbell device with button asset
+
 class SmartDoorbell(Device):
+    '''A smart doorbell's interface to the user is a button.
+    This button is modeled as a boolean sensor.'''
     button = BooleanAsset()
 
+
 # Authorize and connect your device with cloud
-client = Client(deviceToken)
-device = SmartDoorbell(client=client, id=deviceId)
+client = Client(DEVICE_TOKEN)
+device = SmartDoorbell(client=client, id=DEVICE_ID)
 
 # Pin number on your shield where button is connected
-buttonPin = 2
+button_pin = 2
 
 # Button's pin needs to be in INPUT mode
-grovepi.pinMode(buttonPin, 'INPUT')
+grovepi.pinMode(button_pin, 'INPUT')
 
-previousButtonState = False
+# While pressed, the button sensor will send 1 (one).
+# We don't want to send these ones as separate button
+# presses, so we need to keep track of the previous
+# button state - when it's True, it means that the button
+# was pressed already, and that we don't need to send
+# more data. When it was False, and we receive a one,
+# it means that the button has just been pressed and
+# data needs to be sent to the Cloud.
+previous_button_state = False
 
 # Run as long as the device is turned on
 while True:
     # Read state of the button
-    buttonState = grovepi.digitalRead(buttonPin)
-    if buttonState == 1:
-    	if previousButtonState == False:
-    		# Send True value to the cloud, indicating that button is pressed
-    		device.button = True
-    		# Log change to standard output
-    		print( "Dorbell is activated" )
-    		previousButtonState = True
-    elif previousButtonState == True:
-    	# Send False value to the cloud, indicating that button is released
-    	device.button = False
-    	# Log change to standard output
-    	print( "Dorbell is deactivated" )
-    	previousButtonState = False
-    # Sleep for .3 seconds then do it all over again
-    time.sleep(.3)
+    button_state = grovepi.digitalRead(button_pin)
+    if button_state == 1:
+        if not previous_button_state:
+            # Send True value to the cloud, indicating that
+            # button is pressed.
+            device.button = True
+            # Log change to standard output
+            print('Dorbell activated.')
+            previous_button_state = True
+    # When button is released, we publish that only once as well.
+    elif previous_button_state:
+        # Send False value to the cloud, indicating that
+        # button is released.
+        device.button = False
+        # Log change to standard output
+        print('Dorbell deactivated.')
+        previous_button_state = False
 
-
-
-
-
+    # Sleep for 0.3 seconds then do it all over again
+    time.sleep(0.3)
