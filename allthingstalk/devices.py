@@ -90,7 +90,7 @@ class DeviceBase(type):
 
         def _add_asset(self, asset):
             def decorator(fn):
-                self._device_class._handlers[self._stream][asset._internal_id] = fn
+                self._device_class._handlers[self._stream][asset.name] = fn
                 return fn
             self._assets[asset._internal_id] = decorator
 
@@ -128,7 +128,6 @@ class Device(metaclass=DeviceBase):
 
         def make_get_asset(asset):
             def getter(self):
-                print(asset)
                 return self.client
             return getter
 
@@ -170,7 +169,8 @@ class Device(metaclass=DeviceBase):
             raise NotImplementedError('Device creation not implemented.')
 
         cloud_assets = {asset['name']: asset for asset in self.client.get_assets(self.id)}
-        for name, asset in self.assets.items():
+        for asset in self.assets.values():
+            name = asset.name
             if name in cloud_assets:
                 asset.id = cloud_assets[name]['id']
                 asset.thing_id = cloud_assets[name]['deviceId']
@@ -182,9 +182,9 @@ class Device(metaclass=DeviceBase):
         self.client._attach_device(self)
         self._connected = True
 
-    def _on_message(self, stream, internal_asset_id, message):
-        if internal_asset_id in self._handlers[stream]:
-            msg = json.loads(message.decode('utf-8'))
+    def _on_message(self, stream, asset_name, message):
+        if asset_name in self._handlers[stream]:
+            msg = json.loads(message)
             if isinstance(msg, dict):
                 msg = {k.lower(): v for k, v in msg.items()}
             else:
@@ -194,4 +194,4 @@ class Device(metaclass=DeviceBase):
             else:
                 at = datetime.datetime.utcnow()
             value = msg['value']
-            self._handlers[stream][internal_asset_id](self, value, at)
+            self._handlers[stream][asset_name](self, value, at)

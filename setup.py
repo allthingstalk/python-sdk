@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='allthingstalk',
-    version='0.1.7',
+    version='0.1.8',
     description='AllThingsTalk Python SDK',
     url='https://github.com/allthingstalk/python-sdk',
     download_url='https://github.com/allthingstalk/python-sdk/archive/0.1.7.tar.gz',

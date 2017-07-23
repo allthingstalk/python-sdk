@@ -182,6 +182,23 @@ If you'd like to implement a separate program to listen to feeds coming from the
    def on_reset(device, value, at):
        print('Received %s at %s' % (value, at))
 
+Using invalid Python identifiers for asset names
+------------------------------------------------
+
+In some cases, e.g. when using binary payloads, it might be beneficial to set asset names to integers. Since integers are not valid Python identifiers, you won't be able to define them within the device class in the same way as other assets, nor use them to listen to feeds and commands. To make this work, you will have to use the `name` argument when defining your assets, as follows: ::
+
+  class ConstrainedDevice(Device):
+      tilt = BooleanAsset(name='2')
+      door = BooleanAsset(name='4')
+
+  device = ConstrainedDevice(client=..., id=...)
+  device.tilt = True  # will send data to asset named '2'
+
+  @ConstrainedDevice.feed.door  # will listen to feed coming from asset '4'
+  def on_door_feed(device, value, at):
+      print(value)
+
+
 ---------------
 
 API Reference

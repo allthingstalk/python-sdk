@@ -200,6 +200,22 @@
 </pre></div>
 </div>
 </div>
+<div class="section" id="using-invalid-python-identifiers-for-asset-names">
+<h2>Using invalid Python identifiers for asset names<a class="headerlink" href="#using-invalid-python-identifiers-for-asset-names" title="Permalink to this headline">¶</a></h2>
+<p>In some cases, e.g. when using binary payloads, it might be beneficial to set asset names to integers. Since integers are not valid Python identifiers, you won’t be able to define them within the device class in the same way as other assets, nor use them to listen to feeds and commands. To make this work, you will have to use the <cite>name</cite> argument when defining your assets, as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ConstrainedDevice</span><span class="p">(</span><span class="n">Device</span><span class="p">):</span>
+    <span class="n">tilt</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+    <span class="n">door</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;4&#39;</span><span class="p">)</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">ConstrainedDevice</span><span class="p">(</span><span class="n">client</span><span class="o">=...</span><span class="p">,</span> <span class="nb">id</span><span class="o">=...</span><span class="p">)</span>
+<span class="n">device</span><span class="o">.</span><span class="n">tilt</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># will send data to asset named &#39;2&#39;</span>
+
+<span class="nd">@ConstrainedDevice</span><span class="o">.</span><span class="n">feed</span><span class="o">.</span><span class="n">door</span>  <span class="c1"># will listen to feed coming from asset &#39;4&#39;</span>
+<span class="k">def</span> <span class="nf">on_door_feed</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">at</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 <hr class="docutils" />
 <div class="section" id="api-reference">
@@ -257,6 +273,7 @@ this part of the documentation is for you.</p>
 <li><a class="reference internal" href="#publishing-values">Publishing values</a></li>
 <li><a class="reference internal" href="#listening-to-commands">Listening to commands</a></li>
 <li><a class="reference internal" href="#listening-to-feeds">Listening to feeds</a></li>
+<li><a class="reference internal" href="#using-invalid-python-identifiers-for-asset-names">Using invalid Python identifiers for asset names</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#api-reference">API Reference</a></li>

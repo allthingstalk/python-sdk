@@ -134,7 +134,7 @@
 
         <span class="k">def</span> <span class="nf">_add_asset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">asset</span><span class="p">):</span>
             <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_device_class</span><span class="o">.</span><span class="n">_handlers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="p">][</span><span class="n">asset</span><span class="o">.</span><span class="n">_internal_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_device_class</span><span class="o">.</span><span class="n">_handlers</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="p">][</span><span class="n">asset</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">fn</span>
                 <span class="k">return</span> <span class="n">fn</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_assets</span><span class="p">[</span><span class="n">asset</span><span class="o">.</span><span class="n">_internal_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">decorator</span>
 
@@ -172,7 +172,6 @@
 
         <span class="k">def</span> <span class="nf">make_get_asset</span><span class="p">(</span><span class="n">asset</span><span class="p">):</span>
             <span class="k">def</span> <span class="nf">getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">asset</span><span class="p">)</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span>
             <span class="k">return</span> <span class="n">getter</span>
 
@@ -214,7 +213,8 @@
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Device creation not implemented.&#39;</span><span class="p">)</span>
 
         <span class="n">cloud_assets</span> <span class="o">=</span> <span class="p">{</span><span class="n">asset</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]:</span> <span class="n">asset</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_assets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)}</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">asset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">name</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cloud_assets</span><span class="p">:</span>
                 <span class="n">asset</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">cloud_assets</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
                 <span class="n">asset</span><span class="o">.</span><span class="n">thing_id</span> <span class="o">=</span> <span class="n">cloud_assets</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;deviceId&#39;</span><span class="p">]</span>
@@ -226,8 +226,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_attach_device</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-    <span class="k">def</span> <span class="nf">_on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">internal_asset_id</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">internal_asset_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handlers</span><span class="p">[</span><span class="n">stream</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_on_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stream</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">asset_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handlers</span><span class="p">[</span><span class="n">stream</span><span class="p">]:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">msg</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
@@ -238,7 +238,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">at</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">msg</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_handlers</span><span class="p">[</span><span class="n">stream</span><span class="p">][</span><span class="n">internal_asset_id</span><span class="p">](</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">at</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handlers</span><span class="p">[</span><span class="n">stream</span><span class="p">][</span><span class="n">asset_name</span><span class="p">](</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">at</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
