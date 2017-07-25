@@ -27,7 +27,7 @@ AllThingsTalk SDK
 '''
 
 __title__ = 'allthingstalk'
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 __author__ = 'Danilo Vidovic'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2017 AllThingsTalk'
