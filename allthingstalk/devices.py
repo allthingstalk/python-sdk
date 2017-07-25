@@ -128,7 +128,7 @@ class Device(metaclass=DeviceBase):
 
         def make_get_asset(asset):
             def getter(self):
-                return self.client
+                return self.client.get_asset_state(self.id, asset.name)
             return getter
 
         def make_set_asset(asset):
@@ -184,7 +184,7 @@ class Device(metaclass=DeviceBase):
 
     def _on_message(self, stream, asset_name, message):
         if asset_name in self._handlers[stream]:
-            msg = json.loads(message)
+            msg = json.loads(message.decode('utf-8'))
             if isinstance(msg, dict):
                 msg = {k.lower(): v for k, v in msg.items()}
             else:

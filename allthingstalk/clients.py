@@ -23,6 +23,9 @@ import logging
 import paho.mqtt.client as paho_mqtt
 import requests
 
+from .asset_state import AssetState
+from .exceptions import AssetStateRetrievalException, AccessForbiddenException
+
 logger = logging.getLogger('allthingstalk')
 
 
@@ -39,6 +42,9 @@ class BaseClient:
 
     def create_asset(self, device_id, asset):
         raise NotImplementedError('create_asset not implemented')
+
+    def get_asset_state(self, device_id, asset_name):
+        raise NotImplementedError('get_asset_state not implemented')
 
     def publish_asset_state(self, device_id, asset_name, value):
         raise NotImplementedError('publish_asset_state not implemented')
@@ -115,8 +121,12 @@ class Client(BaseClient):
         self._devices[device.id] = device
 
     def get_assets(self, device_id):
-        return requests.get('%s/device/%s/assets' % (self.http, device_id),
-                            headers={'Authorization': 'Bearer %s' % self.token}).json()
+        r = requests.get('%s/device/%s/assets' % (self.http, device_id),
+                         headers={'Authorization': 'Bearer %s' % self.token})
+        if r.status_code == 403:
+            raise AccessForbiddenException('Could not use token "%s" to access device "%s" on "%s".'
+                                           % (self.token, device_id, self.http))
+        return r.json()
 
     def create_asset(self, device_id, asset):
         attalk_asset = {
@@ -130,10 +140,24 @@ class Client(BaseClient):
                              headers={'Authorization': 'Bearer %s' % self.token},
                              json=attalk_asset).json()
 
-    def publish_asset_state(self, device_id, asset_name, value):
+    def get_asset_state(self, device_id, asset_name):
+        r = requests.get('%s/device/%s/asset/%s/state' % (self.http, device_id, asset_name),
+                         headers={'Authorization': 'Bearer %s' % self.token})
+        if r.status_code != 200:
+            raise AssetStateRetrievalException()
+        response_json = r.json()
+        return AssetState(
+            value=response_json['state']['value'],
+            at=response_json['state']['at'])
+
+    def publish_asset_state(self, device_id, asset_name, state):
+        if isinstance(state, AssetState):
+            json_state = {'value': state.value, 'at': state.at.isoformat()}
+        else:
+            json_state = {'value': state}
         requests.put('%s/device/%s/asset/%s/state' % (self.http, device_id, asset_name),
                      headers={'Authorization': 'Bearer %s' % self.token},
-                     json={'value': value})
+                     json=json_state)
 
     def __del__(self):
         try:

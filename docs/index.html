@@ -160,6 +160,18 @@
     <span class="n">reset</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="n">Asset</span><span class="o">.</span><span class="n">ACTUATOR</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="section" id="using-invalid-python-identifiers-for-asset-names">
+<h3>Using invalid Python identifiers for asset names<a class="headerlink" href="#using-invalid-python-identifiers-for-asset-names" title="Permalink to this headline">¶</a></h3>
+<p>In some cases, e.g. when using binary payloads, it might be beneficial to set asset names to integers. Since integers are not valid Python identifiers, you won’t be able to define them within the device class in the same way as other assets, nor use them to listen to feeds and commands. To make this work, you will have to use the <cite>name</cite> argument when defining your assets, as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ConstrainedDevice</span><span class="p">(</span><span class="n">Device</span><span class="p">):</span>
+    <span class="n">tilt</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+    <span class="n">door</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;4&#39;</span><span class="p">)</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">ConstrainedDevice</span><span class="p">(</span><span class="n">client</span><span class="o">=...</span><span class="p">,</span> <span class="nb">id</span><span class="o">=...</span><span class="p">)</span>
+<span class="n">device</span><span class="o">.</span><span class="n">tilt</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># will send data to asset named &#39;2&#39;</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="publishing-values">
 <h2>Publishing values<a class="headerlink" href="#publishing-values" title="Permalink to this headline">¶</a></h2>
@@ -181,6 +193,24 @@
 <span class="o">...</span>
 </pre></div>
 </div>
+<p>If you’d like to specify a custom timestamp when sending your sensor data, you can use <code class="xref py py-class docutils literal"><span class="pre">AssetState</span></code></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">device</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">AssetState</span><span class="p">(</span><span class="s1">&#39;Hello from the future!&#39;</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">)</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieving-values">
+<h2>Retrieving values<a class="headerlink" href="#retrieving-values" title="Permalink to this headline">¶</a></h2>
+<p>If you need to get an asset state from the cloud, for example after a power loss, you can query the corresponding field of your <a class="reference internal" href="api.html#allthingstalk.Device" title="allthingstalk.Device"><code class="xref py py-class docutils literal"><span class="pre">Device</span></code></a> instance. An <code class="xref py py-class docutils literal"><span class="pre">AssetState</span></code> instance will be returned.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_state</span> <span class="o">=</span> <span class="n">weather</span><span class="o">.</span><span class="n">temperature</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">temperature_state</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">temperature_state</span><span class="o">.</span><span class="n">at</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="listening-to-commands">
 <h2>Listening to commands<a class="headerlink" href="#listening-to-commands" title="Permalink to this headline">¶</a></h2>
@@ -197,22 +227,6 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@WeatherStation</span><span class="o">.</span><span class="n">feed</span><span class="o">.</span><span class="n">temperature</span>
 <span class="k">def</span> <span class="nf">on_reset</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">at</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Received </span><span class="si">%s</span><span class="s1"> at </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">at</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="using-invalid-python-identifiers-for-asset-names">
-<h2>Using invalid Python identifiers for asset names<a class="headerlink" href="#using-invalid-python-identifiers-for-asset-names" title="Permalink to this headline">¶</a></h2>
-<p>In some cases, e.g. when using binary payloads, it might be beneficial to set asset names to integers. Since integers are not valid Python identifiers, you won’t be able to define them within the device class in the same way as other assets, nor use them to listen to feeds and commands. To make this work, you will have to use the <cite>name</cite> argument when defining your assets, as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ConstrainedDevice</span><span class="p">(</span><span class="n">Device</span><span class="p">):</span>
-    <span class="n">tilt</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
-    <span class="n">door</span> <span class="o">=</span> <span class="n">BooleanAsset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;4&#39;</span><span class="p">)</span>
-
-<span class="n">device</span> <span class="o">=</span> <span class="n">ConstrainedDevice</span><span class="p">(</span><span class="n">client</span><span class="o">=...</span><span class="p">,</span> <span class="nb">id</span><span class="o">=...</span><span class="p">)</span>
-<span class="n">device</span><span class="o">.</span><span class="n">tilt</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># will send data to asset named &#39;2&#39;</span>
-
-<span class="nd">@ConstrainedDevice</span><span class="o">.</span><span class="n">feed</span><span class="o">.</span><span class="n">door</span>  <span class="c1"># will listen to feed coming from asset &#39;4&#39;</span>
-<span class="k">def</span> <span class="nf">on_door_feed</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">at</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -269,11 +283,14 @@ this part of the documentation is for you.</p>
 <li><a class="reference internal" href="#postponed-connection">Postponed connection</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#adding-assets">Adding assets</a></li>
+<li><a class="reference internal" href="#adding-assets">Adding assets</a><ul>
+<li><a class="reference internal" href="#using-invalid-python-identifiers-for-asset-names">Using invalid Python identifiers for asset names</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#publishing-values">Publishing values</a></li>
+<li><a class="reference internal" href="#retrieving-values">Retrieving values</a></li>
 <li><a class="reference internal" href="#listening-to-commands">Listening to commands</a></li>
 <li><a class="reference internal" href="#listening-to-feeds">Listening to feeds</a></li>
-<li><a class="reference internal" href="#using-invalid-python-identifiers-for-asset-names">Using invalid Python identifiers for asset names</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#api-reference">API Reference</a></li>

@@ -142,6 +142,19 @@ During device development, you might need to append assets to a device after it'
        forecast = StringAsset(kind=Asset.VIRTUAL)
        reset = BooleanAsset(kind=Asset.ACTUATOR)
 
+Using invalid Python identifiers for asset names
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In some cases, e.g. when using binary payloads, it might be beneficial to set asset names to integers. Since integers are not valid Python identifiers, you won't be able to define them within the device class in the same way as other assets, nor use them to listen to feeds and commands. To make this work, you will have to use the `name` argument when defining your assets, as follows: ::
+
+  class ConstrainedDevice(Device):
+      tilt = BooleanAsset(name='2')
+      door = BooleanAsset(name='4')
+
+  device = ConstrainedDevice(client=..., id=...)
+  device.tilt = True  # will send data to asset named '2'
+
+
 Publishing values
 -----------------
 
@@ -163,6 +176,24 @@ There is no special "device loop". You can use pure Python and any of the awesom
 
   ...
 
+If you'd like to specify a custom timestamp when sending your sensor data, you can use :class:`AssetState <allthingstalk.AssetState>` ::
+
+  ...
+  import datetime
+
+  timestamp = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+  device.message = AssetState('Hello from the future!', timestamp)
+  ...
+
+Retrieving values
+-----------------
+
+If you need to get an asset state from the cloud, for example after a power loss, you can query the corresponding field of your :class:`Device <allthingstalk.Device>` instance. An :class:`AssetState <allthingstalk.AssetState>` instance will be returned. ::
+
+  temperature_state = weather.temperature
+  print(temperature_state.value)
+  print(temperature_state.at)
+
 Listening to commands
 ---------------------
 
@@ -181,23 +212,6 @@ If you'd like to implement a separate program to listen to feeds coming from the
    @WeatherStation.feed.temperature
    def on_reset(device, value, at):
        print('Received %s at %s' % (value, at))
-
-Using invalid Python identifiers for asset names
-------------------------------------------------
-
-In some cases, e.g. when using binary payloads, it might be beneficial to set asset names to integers. Since integers are not valid Python identifiers, you won't be able to define them within the device class in the same way as other assets, nor use them to listen to feeds and commands. To make this work, you will have to use the `name` argument when defining your assets, as follows: ::
-
-  class ConstrainedDevice(Device):
-      tilt = BooleanAsset(name='2')
-      door = BooleanAsset(name='4')
-
-  device = ConstrainedDevice(client=..., id=...)
-  device.tilt = True  # will send data to asset named '2'
-
-  @ConstrainedDevice.feed.door  # will listen to feed coming from asset '4'
-  def on_door_feed(device, value, at):
-      print(value)
-
 
 ---------------
 

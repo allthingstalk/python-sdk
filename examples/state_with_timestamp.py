@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 #    _   _ _ _____ _    _              _____     _ _     ___ ___  _  __
 #   /_\ | | |_   _| |_ (_)_ _  __ _ __|_   _|_ _| | |__ / __|   \| |/ /
 #  / _ \| | | | | | ' \| | ' \/ _` (_-< | |/ _` | | / / \__ \ |) | ' <
@@ -18,17 +20,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#
+# AllThingsTalk Timestamp example
+#
 
-class AssetMismatchException(Exception):
-    '''Existing asset on the Platform does not match the asset with the same name supplied in a device definition.'''
-    pass
+import datetime
+
+from allthingstalk import Client, Device, StringAsset, AssetState
+
+# Parameters used to authorize and identify your device
+# Get them on maker.allthingstalk.com
+DEVICE_TOKEN = '<DEVICE_TOKEN>'
+DEVICE_ID = '<DEVICE_ID>'
 
 
-class AssetStateRetrievalException(Exception):
-    '''Asset state could not be retrieved.'''
-    pass
+class Counter(Device):
+    message = StringAsset()
 
 
-class AccessForbiddenException(Exception):
-    '''Forbidden.'''
-    pass
+client = Client(DEVICE_TOKEN)
+device = Counter(client=client, id=DEVICE_ID)
+
+timestamp = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+device.message = AssetState('Hello from the future!', timestamp)

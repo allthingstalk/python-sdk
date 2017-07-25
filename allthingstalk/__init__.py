@@ -27,11 +27,12 @@ AllThingsTalk SDK
 '''
 
 __title__ = 'allthingstalk'
-__version__ = '0.1.0'
+__version__ = '0.2.1'
 __author__ = 'Danilo Vidovic'
 __license__ = 'Apache 2.0'
 __copyright__ = 'Copyright 2017 AllThingsTalk'
 
+from .asset_state import *
 from .assets import *
 from .clients import BaseClient, Client
 from .devices import Device
