@@ -6,11 +6,15 @@ AllThingsTalk Python SDK provides Python APIs to manage and implement AllThingsT
 
 ## System Requirements
 
+AllThingsTalk Python SDK is a Python 3 library, so make sure you have Python 3 installed. Python 2 won’t work.
+
 ## Installation
 
 ```
 pip install allthingstalk
 ```
+
+_Note: If you have both Python 2 and Python 3 installed, and you're installing the library globally, you might need to use `pip3`._
 
 ## Documentation
 
