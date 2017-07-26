@@ -14,8 +14,9 @@ AllThingsTalk Python SDK is a Python 3 library, so make sure you have Python 3 i
 sudo pip3 install allthingstalk
 ```
 
-> This will only install the sdk itself, not including any examples. If you want the sdk as well as some basic examples and experiments, clone the repository to a folder on your Raspberry Pi
-`git clone https://github.com/allthingstalk/python-sdk`
+> This will only install the sdk itself, not including any examples. If you want the sdk as well as some basic examples and experiments 
+* clone the repository to a folder on your Raspberry Pi `git clone https://github.com/allthingstalk/python-sdk`
+* install the sdk `sudo python3 setup.py install`
 
 ## Examples
 
