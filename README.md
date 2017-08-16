@@ -49,7 +49,7 @@ One of primary use cases for the AllThingsTalk Python SDK is embedded developmen
 
 To install the SDK, you can use any of the methods above. In this specific case, we recommend installing the SDK globally as a super user - `sudo pip3 install allthingstalk`.
 
-To see how to integrate the SDK with Grove PI sensors, please take a look at [Using AllThingsTalk SDK with GrovePi](examples/README.md).
+To see how to integrate the SDK with Grove PI sensors, please take a look at [Using AllThingsTalk SDK with GrovePi](examples/grovepi/README.md).
 
 ## Examples
 
