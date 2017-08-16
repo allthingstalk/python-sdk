@@ -30,7 +30,7 @@ You can either clone the public repository:
 git clone git://github.com/allthingstalk/python-sdk.git
 ```
 
-Or, download the [tarball]((https://github.com/allthingstalk/requests/tarball/master):
+Or, download the [tarball](https://github.com/allthingstalk/requests/tarball/master):
 
 ```
 curl -OL https://github.com/allthingstalk/requests/tarball/master
