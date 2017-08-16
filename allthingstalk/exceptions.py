@@ -20,15 +20,20 @@
 
 
 class AssetMismatchException(Exception):
-    '''Existing asset on the Platform does not match the asset with the same name supplied in a device definition.'''
+    """Existing asset on the Platform does not match the asset with the same name supplied in a device definition."""
     pass
 
 
 class AssetStateRetrievalException(Exception):
-    '''Asset state could not be retrieved.'''
+    """Asset state could not be retrieved."""
     pass
 
 
 class AccessForbiddenException(Exception):
-    '''Forbidden.'''
+    """Access Forbidden."""
+    pass
+
+
+class InvalidAssetProfileException(Exception):
+    """Invalid asset profile."""
     pass

@@ -23,6 +23,7 @@ import logging
 import paho.mqtt.client as paho_mqtt
 import requests
 
+from .assets import Asset
 from .asset_state import AssetState
 from .exceptions import AssetStateRetrievalException, AccessForbiddenException
 
@@ -30,9 +31,9 @@ logger = logging.getLogger('allthingstalk')
 
 
 class BaseClient:
-    '''BaseClient is a base class used for implementing AllThingsTalk Platform
+    """BaseClient is a base class used for implementing AllThingsTalk Platform
     clients, which are used for interfacing the SDK code with the Platform. It
-    doesn't implement any of the client methods.'''
+    doesn't implement any of the client methods."""
 
     def _attach_device(self, device):
         pass
@@ -51,9 +52,19 @@ class BaseClient:
 
 
 class Client(BaseClient):
+    """Client is the recommended class used for connecting to AllThingsTalk
+    Platform, that uses HTTP and MQTT in the background. By default, it
+    connects to api.allthingstalk.io."""
 
-    def __init__(self, token, *, api='api.allthingstalk.io',
-                 http=None, mqtt=None):
+    def __init__(self, token, *, api='api.allthingstalk.io', http=None, mqtt=None):
+        """Initializes the Client with an AllThingsTalk token, and optional endpoints.
+
+        :param str token: AllThingsTalk Token, e.g. a Device Token
+        :param str api: AllThingsTalk API endpoint, shared by HTTP & MQTT
+        :param str http: AllThingsTalk HTTP endpoint. Resolved from api by default
+        :param str mqtt: AllThingsTalk MQTT endpoint. Resolved from api by default
+        """
+
         self.token = token
 
         def prefix_http(url):
@@ -121,14 +132,29 @@ class Client(BaseClient):
         self._devices[device.id] = device
 
     def get_assets(self, device_id):
+        """Retrieves assets for the device identified by device_id.
+
+        :param str device_id: AllThingsTalk Device Identifier
+        :return: Asset list returned by AllThingsTalk API.
+        :rtype: list of Asset
+        """
+
         r = requests.get('%s/device/%s/assets' % (self.http, device_id),
                          headers={'Authorization': 'Bearer %s' % self.token})
         if r.status_code == 403:
             raise AccessForbiddenException('Could not use token "%s" to access device "%s" on "%s".'
                                            % (self.token, device_id, self.http))
-        return r.json()
+        return [Asset.from_dict(asset_dict) for asset_dict in r.json()]
 
     def create_asset(self, device_id, asset):
+        """Creates a device asset.
+
+        :param str device_id: AllThingsTalk Device Identifier
+        :param Asset asset: The asset
+        :return: The asset
+        :rtype: Asset
+        """
+
         attalk_asset = {
             'Name': asset.name,
             'Title': asset.title,
@@ -136,11 +162,21 @@ class Client(BaseClient):
             'Is': asset.kind,
             'Profile': asset.profile
         }
-        return requests.post('%s/device/%s/assets' % (self.http, device_id),
-                             headers={'Authorization': 'Bearer %s' % self.token},
-                             json=attalk_asset).json()
+        asset_dict = requests.post('%s/device/%s/assets' % (self.http, device_id),
+                                   headers={'Authorization': 'Bearer %s' % self.token},
+                                   json=attalk_asset).json()
+        return Asset.from_dict(asset_dict)
 
     def get_asset_state(self, device_id, asset_name):
+        """Low-level device asset state retrieval. Most of the time,
+        you should be using device asset getters.
+
+        :param str device_id: AllThingsTalk Device Identifier
+        :param str asset_name: Asset name
+        :return: The Asset state
+        :rtype: AssetState
+        """
+
         r = requests.get('%s/device/%s/asset/%s/state' % (self.http, device_id, asset_name),
                          headers={'Authorization': 'Bearer %s' % self.token})
         if r.status_code != 200:
@@ -151,6 +187,14 @@ class Client(BaseClient):
             at=response_json['state']['at'])
 
     def publish_asset_state(self, device_id, asset_name, state):
+        """Low-level device asset state publishing. Most of the time,
+        you should be using device asset setters.
+
+        :param str device_id: AllThingsTalk Device Identifier
+        :param str asset_name: Asset name
+        :param AssetState state: The asset state
+        """
+
         if isinstance(state, AssetState):
             json_state = {'value': state.value, 'at': state.at.isoformat()}
         else:

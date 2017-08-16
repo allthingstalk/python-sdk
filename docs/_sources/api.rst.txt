@@ -32,6 +32,14 @@ Assets
 
 .. _api-clients:
 
+Asset State
+-----------
+
+.. autoclass:: AssetState
+   :members:
+
+   .. automethod:: __init__
+
 Clients
 -------
 
@@ -41,6 +49,8 @@ Clients
 .. autoclass:: Client
    :members:
 
+   .. automethod:: __init__
+
 .. _api-devices:
 
 Devices
@@ -49,12 +59,20 @@ Devices
 .. autoclass:: Device
    :members:
 
+   .. automethod:: __init__
+
 .. _api-exceptions:
 
 Exceptions
 ----------
 
 .. autoexception:: AssetMismatchException
+
+.. autoexception:: AssetStateRetrievalException
+
+.. autoexception:: AccessForbiddenException
+
+.. autoexception:: InvalidAssetProfileException
 
 .. _api-profiles:
 

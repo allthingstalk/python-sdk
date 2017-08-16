@@ -19,6 +19,7 @@
 # limitations under the License.
 
 from . import profiles
+from . import exceptions
 
 
 class Asset:
@@ -31,7 +32,7 @@ class Asset:
     _PROFILE_CLASS = None
 
     def __init__(self, *, kind='sensor', name=None, title=None,
-                 description='', handler=None, **kwargs):
+                 description='', handler=None, profile=None, **kwargs):
         self.id = None
         self.thing_id = None
         self.kind = kind if kind else 'sensor'
@@ -42,10 +43,24 @@ class Asset:
         self.handler = handler
         if self.__class__._PROFILE_CLASS:
             self.profile = self.__class__._PROFILE_CLASS(**kwargs)
-        elif 'profile' in kwargs and kwargs['profile']:
-            self.profile = kwargs['profile']
+        elif profile is not None:
+            self.profile = profile
+        else:
+            raise exceptions.InvalidAssetProfileException()
         if 'type' in self.profile:
             self.type = self.profile['type']
+
+    @staticmethod
+    def from_dict(d):
+        asset = Asset(
+            kind=d['is'],
+            name=d['name'],
+            title=d['title'],
+            description=d['description'],
+            profile=d['profile'])
+        asset.id = d['id']
+        asset.thing_id = d['deviceId']
+        return asset
 
 
 class NumberAsset(Asset):
