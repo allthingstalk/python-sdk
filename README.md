@@ -47,7 +47,7 @@ pip3 install .
 
 One of primary use cases for the AllThingsTalk Python SDK is embedded development on Linux devices, and Raspberry PI is among the most popular embedded Linux platforms.
 
-To install the SDK, you can use any of the methods above. In this specific case, we recommend installing the SDK globally as a super user - `sudo pip3 install allthingstalk`.
+To install the SDK, you can use any of the methods above. Whichever method you choose, we recommend executing it globally as a super user - `sudo pip3 install allthingstalk`.
 
 To see how to integrate the SDK with Grove PI sensors, please take a look at [Using AllThingsTalk SDK with GrovePi](examples/grovepi/README.md).
 
