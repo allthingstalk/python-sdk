@@ -11,7 +11,7 @@ AllThingsTalk Python SDK is a Python 3 library, so make sure you have Python 3 i
 Clone Dexter industries GrovePi repository to your Raspberry PI:
 
 ```
-git clone https://github.com/DexterInd/GrovePi.git`
+git clone https://github.com/DexterInd/GrovePi.git
 ```
 
 Navigate to `GrovePi/Script` and run:
