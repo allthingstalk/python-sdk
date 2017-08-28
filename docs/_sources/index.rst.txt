@@ -43,7 +43,9 @@ With PIP
 
 To install AllThingsTalk Python SDK, run this command in your terminal of choice: ::
 
-  $ pip install allthingstalk
+  $ pip3 install allthingstalk
+
+We recommend that you install the SDK inside a [Python Virtual Enviroment](https://realpython.com/blog/python/python-virtual-environments-a-primer/). In case you wish to install the package globally, you will probably need to prefix the command with `sudo`.
 
 This is the preferred way of obtaining AllThingsTalk SDK.
 
@@ -65,7 +67,15 @@ Or, download the tarball: ::
 
 Once you have a copy of the source, you can embed it in your own Python package, or install it into your site-packages easily with: ::
 
-  $ python setup.py install
+  $ cd python-sdk
+  $ pip3 install .
+
+Examples
+========
+
+If you are new to Python, or to IoT, we recommend our `Experiments & Demos <http://docs.allthingstalk.com/projects/raspberry-pi-smart-doorbell/>`_.
+
+You can find examples in the `examples directory <https://github.com/allthingstalk/python-sdk/tree/master/examples>`_. To get them to your computer or device, either clone the repository, or download the zip.
 
 Tutorial
 ========

@@ -146,21 +146,21 @@
 
 
 <div class="viewcode-block" id="Device"><a class="viewcode-back" href="../../api.html#allthingstalk.Device">[docs]</a><span class="k">class</span> <span class="nc">Device</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">DeviceBase</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Device contains information about assets. It maps to AllThingsTalk</span>
-<span class="sd">    Platform device resources.&#39;&#39;&#39;</span>
+    <span class="sd">&quot;&quot;&quot;Device contains information about assets. It maps to AllThingsTalk</span>
+<span class="sd">    Platform device resources.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<div class="viewcode-block" id="Device.__init__"><a class="viewcode-back" href="../../api.html#allthingstalk.Device.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">connect</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">overwrite_assets</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Initializes the device</span>
+        <span class="sd">&quot;&quot;&quot;Initializes the device</span>
 
 <span class="sd">        :param Client client: The client used to interface with the platform</span>
 <span class="sd">        :param str id: Device resource id. If supplied, the device will be mapped to the device resource. If None, an attempt will be made to create the device.</span>
-<span class="sd">        :param connect boolean: If ``True``, the device should connect to the cloud immediately.</span>
+<span class="sd">        :param bool connect: If ``True``, the device should connect to the cloud immediately.</span>
 <span class="sd">        :param bool overwrite_assets: If ``True``, asset mismatch between the Platform and device definition will be resolved by configuring local assets on the Platform. If ``False``, AssetMismatchException will be raised.</span>
 
 <span class="sd">        :raises AssetMismatchException: if asset mismatch is found between the existing asset on the Platform and an asset definition, and overwrite_assets is ``False``</span>
 
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -190,17 +190,18 @@
             <span class="nb">setattr</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">asset</span><span class="o">.</span><span class="n">_internal_id</span><span class="p">,</span> <span class="n">asset_property</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">connect</span> <span class="ow">and</span> <span class="n">client</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Device.connect"><a class="viewcode-back" href="../../api.html#allthingstalk.Device.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite_assets</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Connects to the device to AllThingsTalk Platform</span>
+        <span class="sd">&quot;&quot;&quot;Connects to the device to AllThingsTalk Platform. The default</span>
+<span class="sd">        :class:`~allthingstalk.Client` calls this method automatically.</span>
 
 <span class="sd">        :param Client client: The client used to interface with the platform</span>
 <span class="sd">        :param str id: Device resource id. If supplied, the device will be mapped to the device resource. If None, an attempt will be made to create the device.</span>
 <span class="sd">        :param bool overwrite_assets: If ``True``, asset mismatch between the Platform and device definition will be resolved by configuring local assets on the Platform. If ``False``, AssetMismatchException will be raised.</span>
 
 <span class="sd">        :raises AssetMismatchException: if asset mismatch is found between the existing asset on the Platform and an asset definition, and overwrite_assets is ``False``</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span>
@@ -212,16 +213,15 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Device creation not implemented.&#39;</span><span class="p">)</span>
 
-        <span class="n">cloud_assets</span> <span class="o">=</span> <span class="p">{</span><span class="n">asset</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]:</span> <span class="n">asset</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_assets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)}</span>
+        <span class="n">cloud_assets</span> <span class="o">=</span> <span class="p">{</span><span class="n">asset</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">asset</span> <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get_assets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)}</span>
         <span class="k">for</span> <span class="n">asset</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">assets</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">asset</span><span class="o">.</span><span class="n">name</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cloud_assets</span><span class="p">:</span>
-                <span class="n">asset</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">cloud_assets</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-                <span class="n">asset</span><span class="o">.</span><span class="n">thing_id</span> <span class="o">=</span> <span class="n">cloud_assets</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;deviceId&#39;</span><span class="p">]</span>
+                <span class="n">cloud_asset</span> <span class="o">=</span> <span class="n">cloud_assets</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">new_cloud_asset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">create_asset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">asset</span><span class="p">)</span>
-                <span class="n">asset</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">new_cloud_asset</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
-                <span class="n">asset</span><span class="o">.</span><span class="n">thing_id</span> <span class="o">=</span> <span class="n">new_cloud_asset</span><span class="p">[</span><span class="s1">&#39;deviceId&#39;</span><span class="p">]</span>
+                <span class="n">cloud_asset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">create_asset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">asset</span><span class="p">)</span>
+            <span class="n">asset</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">cloud_asset</span><span class="o">.</span><span class="n">id</span>
+            <span class="n">asset</span><span class="o">.</span><span class="n">thing_id</span> <span class="o">=</span> <span class="n">cloud_asset</span><span class="o">.</span><span class="n">thing_id</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">_attach_device</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span> <span class="o">=</span> <span class="kc">True</span></div>

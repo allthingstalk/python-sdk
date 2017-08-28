@@ -67,6 +67,7 @@
 <span class="kn">import</span> <span class="nn">paho.mqtt.client</span> <span class="k">as</span> <span class="nn">paho_mqtt</span>
 <span class="kn">import</span> <span class="nn">requests</span>
 
+<span class="kn">from</span> <span class="nn">.assets</span> <span class="k">import</span> <span class="n">Asset</span>
 <span class="kn">from</span> <span class="nn">.asset_state</span> <span class="k">import</span> <span class="n">AssetState</span>
 <span class="kn">from</span> <span class="nn">.exceptions</span> <span class="k">import</span> <span class="n">AssetStateRetrievalException</span><span class="p">,</span> <span class="n">AccessForbiddenException</span>
 
@@ -74,9 +75,9 @@
 
 
 <div class="viewcode-block" id="BaseClient"><a class="viewcode-back" href="../../api.html#allthingstalk.BaseClient">[docs]</a><span class="k">class</span> <span class="nc">BaseClient</span><span class="p">:</span>
-    <span class="sd">&#39;&#39;&#39;BaseClient is a base class used for implementing AllThingsTalk Platform</span>
+    <span class="sd">&quot;&quot;&quot;BaseClient is a base class used for implementing AllThingsTalk Platform</span>
 <span class="sd">    clients, which are used for interfacing the SDK code with the Platform. It</span>
-<span class="sd">    doesn&#39;t implement any of the client methods.&#39;&#39;&#39;</span>
+<span class="sd">    doesn&#39;t implement any of the client methods.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">_attach_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
         <span class="k">pass</span>
@@ -95,9 +96,19 @@
 
 
 <div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../api.html#allthingstalk.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="n">BaseClient</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Client is the recommended class used for connecting to AllThingsTalk</span>
+<span class="sd">    Platform, that uses HTTP and MQTT in the background. By default, it</span>
+<span class="sd">    connects to api.allthingstalk.io.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="s1">&#39;api.allthingstalk.io&#39;</span><span class="p">,</span>
-                 <span class="n">http</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mqtt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Client.__init__"><a class="viewcode-back" href="../../api.html#allthingstalk.Client.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">api</span><span class="o">=</span><span class="s1">&#39;api.allthingstalk.io&#39;</span><span class="p">,</span> <span class="n">http</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mqtt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initializes the Client with an AllThingsTalk token, and optional endpoints.</span>
+
+<span class="sd">        :param str token: AllThingsTalk Token, e.g. a Device Token</span>
+<span class="sd">        :param str api: AllThingsTalk API endpoint, shared by HTTP &amp; MQTT</span>
+<span class="sd">        :param str http: AllThingsTalk HTTP endpoint. Resolved from api by default</span>
+<span class="sd">        :param str mqtt: AllThingsTalk MQTT endpoint. Resolved from api by default</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
 
         <span class="k">def</span> <span class="nf">prefix_http</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
@@ -127,7 +138,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mqtt</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span> <span class="o">=</span> <span class="p">{}</span></div>
 
     <span class="k">def</span> <span class="nf">_make_mqtt_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">on_mqtt_connect</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">userdata</span><span class="p">,</span> <span class="n">rc</span><span class="p">):</span>
@@ -164,15 +175,30 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">mqtt</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="s1">&#39;device/</span><span class="si">%s</span><span class="s1">/asset/+/</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">action</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_devices</span><span class="p">[</span><span class="n">device</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">device</span>
 
-    <span class="k">def</span> <span class="nf">get_assets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">):</span>
+<div class="viewcode-block" id="Client.get_assets"><a class="viewcode-back" href="../../api.html#allthingstalk.Client.get_assets">[docs]</a>    <span class="k">def</span> <span class="nf">get_assets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieves assets for the device identified by device_id.</span>
+
+<span class="sd">        :param str device_id: AllThingsTalk Device Identifier</span>
+<span class="sd">        :return: Asset list returned by AllThingsTalk API.</span>
+<span class="sd">        :rtype: list of Asset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/device/</span><span class="si">%s</span><span class="s1">/assets&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">,</span> <span class="n">device_id</span><span class="p">),</span>
                          <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Bearer </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">})</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">AccessForbiddenException</span><span class="p">(</span><span class="s1">&#39;Could not use token &quot;</span><span class="si">%s</span><span class="s1">&quot; to access device &quot;</span><span class="si">%s</span><span class="s1">&quot; on &quot;</span><span class="si">%s</span><span class="s1">&quot;.&#39;</span>
                                            <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">Asset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">asset_dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">asset_dict</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()]</span></div>
 
-    <span class="k">def</span> <span class="nf">create_asset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset</span><span class="p">):</span>
+<div class="viewcode-block" id="Client.create_asset"><a class="viewcode-back" href="../../api.html#allthingstalk.Client.create_asset">[docs]</a>    <span class="k">def</span> <span class="nf">create_asset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a device asset.</span>
+
+<span class="sd">        :param str device_id: AllThingsTalk Device Identifier</span>
+<span class="sd">        :param Asset asset: The asset</span>
+<span class="sd">        :return: The asset</span>
+<span class="sd">        :rtype: Asset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">attalk_asset</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;Name&#39;</span><span class="p">:</span> <span class="n">asset</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
             <span class="s1">&#39;Title&#39;</span><span class="p">:</span> <span class="n">asset</span><span class="o">.</span><span class="n">title</span><span class="p">,</span>
@@ -180,11 +206,21 @@
             <span class="s1">&#39;Is&#39;</span><span class="p">:</span> <span class="n">asset</span><span class="o">.</span><span class="n">kind</span><span class="p">,</span>
             <span class="s1">&#39;Profile&#39;</span><span class="p">:</span> <span class="n">asset</span><span class="o">.</span><span class="n">profile</span>
         <span class="p">}</span>
-        <span class="k">return</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/device/</span><span class="si">%s</span><span class="s1">/assets&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">,</span> <span class="n">device_id</span><span class="p">),</span>
-                             <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Bearer </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">},</span>
-                             <span class="n">json</span><span class="o">=</span><span class="n">attalk_asset</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">asset_dict</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/device/</span><span class="si">%s</span><span class="s1">/assets&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">,</span> <span class="n">device_id</span><span class="p">),</span>
+                                   <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Bearer </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">},</span>
+                                   <span class="n">json</span><span class="o">=</span><span class="n">attalk_asset</span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">Asset</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">asset_dict</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">get_asset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">):</span>
+<div class="viewcode-block" id="Client.get_asset_state"><a class="viewcode-back" href="../../api.html#allthingstalk.Client.get_asset_state">[docs]</a>    <span class="k">def</span> <span class="nf">get_asset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Low-level device asset state retrieval. Most of the time,</span>
+<span class="sd">        you should be using device asset getters.</span>
+
+<span class="sd">        :param str device_id: AllThingsTalk Device Identifier</span>
+<span class="sd">        :param str asset_name: Asset name</span>
+<span class="sd">        :return: The Asset state</span>
+<span class="sd">        :rtype: AssetState</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/device/</span><span class="si">%s</span><span class="s1">/asset/</span><span class="si">%s</span><span class="s1">/state&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">),</span>
                          <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Bearer </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">})</span>
         <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
@@ -192,16 +228,24 @@
         <span class="n">response_json</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">AssetState</span><span class="p">(</span>
             <span class="n">value</span><span class="o">=</span><span class="n">response_json</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;value&#39;</span><span class="p">],</span>
-            <span class="n">at</span><span class="o">=</span><span class="n">response_json</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;at&#39;</span><span class="p">])</span>
+            <span class="n">at</span><span class="o">=</span><span class="n">response_json</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">][</span><span class="s1">&#39;at&#39;</span><span class="p">])</span></div>
 
-    <span class="k">def</span> <span class="nf">publish_asset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<div class="viewcode-block" id="Client.publish_asset_state"><a class="viewcode-back" href="../../api.html#allthingstalk.Client.publish_asset_state">[docs]</a>    <span class="k">def</span> <span class="nf">publish_asset_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Low-level device asset state publishing. Most of the time,</span>
+<span class="sd">        you should be using device asset setters.</span>
+
+<span class="sd">        :param str device_id: AllThingsTalk Device Identifier</span>
+<span class="sd">        :param str asset_name: Asset name</span>
+<span class="sd">        :param AssetState state: The asset state</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">AssetState</span><span class="p">):</span>
             <span class="n">json_state</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;at&#39;</span><span class="p">:</span> <span class="n">state</span><span class="o">.</span><span class="n">at</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()}</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">json_state</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">}</span>
         <span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/device/</span><span class="si">%s</span><span class="s1">/asset/</span><span class="si">%s</span><span class="s1">/state&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">,</span> <span class="n">device_id</span><span class="p">,</span> <span class="n">asset_name</span><span class="p">),</span>
                      <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Bearer </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">},</span>
-                     <span class="n">json</span><span class="o">=</span><span class="n">json_state</span><span class="p">)</span>
+                     <span class="n">json</span><span class="o">=</span><span class="n">json_state</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>

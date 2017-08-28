@@ -72,9 +72,10 @@
 <div class="section" id="with-pip">
 <h2>With PIP<a class="headerlink" href="#with-pip" title="Permalink to this headline">¶</a></h2>
 <p>To install AllThingsTalk Python SDK, run this command in your terminal of choice:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install allthingstalk
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip3 install allthingstalk
 </pre></div>
 </div>
+<p>We recommend that you install the SDK inside a [Python Virtual Enviroment](<a class="reference external" href="https://realpython.com/blog/python/python-virtual-environments-a-primer/">https://realpython.com/blog/python/python-virtual-environments-a-primer/</a>). In case you wish to install the package globally, you will probably need to prefix the command with <cite>sudo</cite>.</p>
 <p>This is the preferred way of obtaining AllThingsTalk SDK.</p>
 </div>
 <div class="section" id="from-the-source">
@@ -94,10 +95,16 @@
 </pre></div>
 </div>
 <p>Once you have a copy of the source, you can embed it in your own Python package, or install it into your site-packages easily with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ python setup.py install
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd python-sdk
+$ pip3 install .
 </pre></div>
 </div>
 </div>
+</div>
+<div class="section" id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
+<p>If you are new to Python, or to IoT, we recommend our <a class="reference external" href="http://docs.allthingstalk.com/projects/raspberry-pi-smart-doorbell/">Experiments &amp; Demos</a>.</p>
+<p>You can find examples in the <a class="reference external" href="https://github.com/allthingstalk/python-sdk/tree/master/examples">examples directory</a>. To get them to your computer or device, either clone the repository, or download the zip.</p>
 </div>
 <div class="section" id="tutorial">
 <h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this headline">¶</a></h1>
@@ -193,7 +200,7 @@
 <span class="o">...</span>
 </pre></div>
 </div>
-<p>If you’d like to specify a custom timestamp when sending your sensor data, you can use <code class="xref py py-class docutils literal"><span class="pre">AssetState</span></code></p>
+<p>If you’d like to specify a custom timestamp when sending your sensor data, you can use <a class="reference internal" href="api.html#allthingstalk.AssetState" title="allthingstalk.AssetState"><code class="xref py py-class docutils literal"><span class="pre">AssetState</span></code></a></p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">...</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 
@@ -205,7 +212,7 @@
 </div>
 <div class="section" id="retrieving-values">
 <h2>Retrieving values<a class="headerlink" href="#retrieving-values" title="Permalink to this headline">¶</a></h2>
-<p>If you need to get an asset state from the cloud, for example after a power loss, you can query the corresponding field of your <a class="reference internal" href="api.html#allthingstalk.Device" title="allthingstalk.Device"><code class="xref py py-class docutils literal"><span class="pre">Device</span></code></a> instance. An <code class="xref py py-class docutils literal"><span class="pre">AssetState</span></code> instance will be returned.</p>
+<p>If you need to get an asset state from the cloud, for example after a power loss, you can query the corresponding field of your <a class="reference internal" href="api.html#allthingstalk.Device" title="allthingstalk.Device"><code class="xref py py-class docutils literal"><span class="pre">Device</span></code></a> instance. An <a class="reference internal" href="api.html#allthingstalk.AssetState" title="allthingstalk.AssetState"><code class="xref py py-class docutils literal"><span class="pre">AssetState</span></code></a> instance will be returned.</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">temperature_state</span> <span class="o">=</span> <span class="n">weather</span><span class="o">.</span><span class="n">temperature</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">temperature_state</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">temperature_state</span><span class="o">.</span><span class="n">at</span><span class="p">)</span>
@@ -240,6 +247,7 @@ this part of the documentation is for you.</p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#assets">Assets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#asset-state">Asset State</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#clients">Clients</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#devices">Devices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#exceptions">Exceptions</a></li>
@@ -277,6 +285,7 @@ this part of the documentation is for you.</p>
 <li><a class="reference internal" href="#from-the-source">From the source</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#tutorial">Tutorial</a><ul>
 <li><a class="reference internal" href="#defining-devices">Defining devices</a></li>
 <li><a class="reference internal" href="#connecting-to-the-cloud">Connecting to the cloud</a><ul>

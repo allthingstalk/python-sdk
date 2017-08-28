@@ -24,11 +24,17 @@ from dateutil.parser import parse as parse_date
 
 
 class AssetState:
-    '''AssetState is used instead of primitive state values (like 2, "a"
-    or True) when publishing data with a custom timestamp, i.e. not the
-    current timestamp at the time of publishing.'''
+    """AssetState is used instead of primitive state values (like ``2``, ``"a"``
+    or ``True``) when publishing data with a custom timestamp, i.e. not the
+    current timestamp at the time of publishing."""
 
     def __init__(self, value, at=None):
+        """Initializes the asset state.
+
+        :param value: Any JSON-serializable value applicable to the given :class:`~allthingstalk.Asset`.
+        :param datetime.datetime at: Optional timestamp
+        """
+
         self.value = value
         if at is None:
             self.at = datetime.datetime.utcnow()

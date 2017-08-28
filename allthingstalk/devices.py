@@ -102,21 +102,21 @@ class DeviceBase(type):
 
 
 class Device(metaclass=DeviceBase):
-    '''Device contains information about assets. It maps to AllThingsTalk
-    Platform device resources.'''
+    """Device contains information about assets. It maps to AllThingsTalk
+    Platform device resources."""
 
     def __init__(self, *, client=None, id=None, connect=True,
                  overwrite_assets=False, **kwargs):
-        '''Initializes the device
+        """Initializes the device
 
         :param Client client: The client used to interface with the platform
         :param str id: Device resource id. If supplied, the device will be mapped to the device resource. If None, an attempt will be made to create the device.
-        :param connect boolean: If ``True``, the device should connect to the cloud immediately.
+        :param bool connect: If ``True``, the device should connect to the cloud immediately.
         :param bool overwrite_assets: If ``True``, asset mismatch between the Platform and device definition will be resolved by configuring local assets on the Platform. If ``False``, AssetMismatchException will be raised.
 
         :raises AssetMismatchException: if asset mismatch is found between the existing asset on the Platform and an asset definition, and overwrite_assets is ``False``
 
-        '''
+        """
 
         self._connected = False
 
@@ -149,14 +149,15 @@ class Device(metaclass=DeviceBase):
             self.connect()
 
     def connect(self, *, client=None, id=None, overwrite_assets=None):
-        '''Connects to the device to AllThingsTalk Platform
+        """Connects to the device to AllThingsTalk Platform. The default
+        :class:`~allthingstalk.Client` calls this method automatically.
 
         :param Client client: The client used to interface with the platform
         :param str id: Device resource id. If supplied, the device will be mapped to the device resource. If None, an attempt will be made to create the device.
         :param bool overwrite_assets: If ``True``, asset mismatch between the Platform and device definition will be resolved by configuring local assets on the Platform. If ``False``, AssetMismatchException will be raised.
 
         :raises AssetMismatchException: if asset mismatch is found between the existing asset on the Platform and an asset definition, and overwrite_assets is ``False``
-        '''
+        """
 
         if id is not None:
             self.id = id
@@ -168,16 +169,15 @@ class Device(metaclass=DeviceBase):
         if not self.id:
             raise NotImplementedError('Device creation not implemented.')
 
-        cloud_assets = {asset['name']: asset for asset in self.client.get_assets(self.id)}
+        cloud_assets = {asset.name: asset for asset in self.client.get_assets(self.id)}
         for asset in self.assets.values():
             name = asset.name
             if name in cloud_assets:
-                asset.id = cloud_assets[name]['id']
-                asset.thing_id = cloud_assets[name]['deviceId']
+                cloud_asset = cloud_assets[name]
             else:
-                new_cloud_asset = self.client.create_asset(self.id, asset)
-                asset.id = new_cloud_asset['id']
-                asset.thing_id = new_cloud_asset['deviceId']
+                cloud_asset = self.client.create_asset(self.id, asset)
+            asset.id = cloud_asset.id
+            asset.thing_id = cloud_asset.thing_id
 
         self.client._attach_device(self)
         self._connected = True
