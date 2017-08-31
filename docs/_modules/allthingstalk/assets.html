@@ -75,8 +75,19 @@
 
     <span class="n">_PROFILE_CLASS</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;sensor&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Asset.__init__"><a class="viewcode-back" href="../../api.html#allthingstalk.Asset.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;sensor&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">description</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;References the asset identified by name. The asset is created on the platform</span>
+<span class="sd">        if it doesn&#39;t already exist. If the asset is initialized from a device class,</span>
+<span class="sd">        it&#39;s default name is set to the member name referencing it.</span>
+
+<span class="sd">        :param str kind: Asset kind: sensor, actuator, virtual or config</span>
+<span class="sd">        :param str name: Asset&#39;s name. If the asset is initialized from a device class, the name defaults to the name of the member referencing the asset, e.g. for ``my_asset = IntegerAsset()``, the integer asset&#39;s name will be set to ``&#39;my_asset&#39;``</span>
+<span class="sd">        :param str title: Asset&#39;s title. By default it gets set to capitalized name.</span>
+<span class="sd">        :param str description: Asset&#39;s description</span>
+<span class="sd">        :param Profile profile: Asset&#39;s profile. For default profiles, it&#39;s recommend to use Asset variants with preset profile, like IntegerAsset or StringAsset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">thing_id</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span> <span class="k">if</span> <span class="n">kind</span> <span class="k">else</span> <span class="s1">&#39;sensor&#39;</span>
@@ -92,7 +103,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">InvalidAssetProfileException</span><span class="p">()</span>
         <span class="k">if</span> <span class="s1">&#39;type&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span></div>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_dict</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>

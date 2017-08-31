@@ -51,7 +51,30 @@
 <dl class="class">
 <dt id="allthingstalk.Asset">
 <em class="property">class </em><code class="descclassname">allthingstalk.</code><code class="descname">Asset</code><span class="sig-paren">(</span><em>*</em>, <em>kind=’sensor’</em>, <em>name=None</em>, <em>title=None</em>, <em>description=”</em>, <em>handler=None</em>, <em>profile=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/assets.html#Asset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.Asset" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="method">
+<dt id="allthingstalk.Asset.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>*</em>, <em>kind=’sensor’</em>, <em>name=None</em>, <em>title=None</em>, <em>description=”</em>, <em>handler=None</em>, <em>profile=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/allthingstalk/assets.html#Asset.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#allthingstalk.Asset.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>References the asset identified by name. The asset is created on the platform
+if it doesn’t already exist. If the asset is initialized from a device class,
+it’s default name is set to the member name referencing it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>kind</strong> (<em>str</em>) – Asset kind: sensor, actuator, virtual or config</li>
+<li><strong>name</strong> (<em>str</em>) – Asset’s name. If the asset is initialized from a device class, the name defaults to the name of the member referencing the asset, e.g. for <code class="docutils literal"><span class="pre">my_asset</span> <span class="pre">=</span> <span class="pre">IntegerAsset()</span></code>, the integer asset’s name will be set to <code class="docutils literal"><span class="pre">'my_asset'</span></code></li>
+<li><strong>title</strong> (<em>str</em>) – Asset’s title. By default it gets set to capitalized name.</li>
+<li><strong>description</strong> (<em>str</em>) – Asset’s description</li>
+<li><strong>profile</strong> (<a class="reference internal" href="#allthingstalk.profiles.Profile" title="allthingstalk.profiles.Profile"><em>Profile</em></a>) – Asset’s profile. For default profiles, it’s recommend to use Asset variants with preset profile, like IntegerAsset or StringAsset.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
 
 <dl class="class">
 <dt id="allthingstalk.NumberAsset">

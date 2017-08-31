@@ -102,7 +102,7 @@ Each device you create will subclass AllThingsTalk :class:`Device <allthingstalk
 
 We're defining a device called `WeatherStation`, which has three assets: `temperature`, `forecast`, and `reset`. At this moment, we are not concerning ourselves with how their values are going to be obtained, but how they are going to be modeled in AllThingsTalk Platform.
 
-The assets in this example have different types: :class:`NumberAsset <allthingstalk.NumberAsset>`, :class:`StringAsset <allthingstalk.StringAsset>`, and :class:`BooleanAsset <allthingstalk.BooleanAsset>`. To see other available asset types, you can jump to :ref:`Assets <api-assets>`. They are also of different `kinds <http://docs.allthingstalk.com/cloud/concepts/assets/#types>`_. `Temperature` is a ``SENSOR``, which is the default asset kind, `forecast` is a ``VIRTUAL``, and `reset` is an ``ACTUATOR``.
+The assets in this example have different types: :class:`NumberAsset <allthingstalk.NumberAsset>`, :class:`StringAsset <allthingstalk.StringAsset>`, and :class:`BooleanAsset <allthingstalk.BooleanAsset>`. To see other available asset types, you can jump to :ref:`Assets <api-assets>`. To customize an asset's name or title, see :func:`Asset.__init__ <allthingstalk.Asset.__init__>`. They are also of different `kinds <http://docs.allthingstalk.com/cloud/concepts/assets/#types>`_. `Temperature` is a ``SENSOR``, which is the default asset kind, `forecast` is a ``VIRTUAL``, and `reset` is an ``ACTUATOR``.
 
 Some asset types, like :class:`NumberAsset <allthingstalk.NumberAsset>`, can be configured with type specific properties - extras [#extras]_. Here, we're configuring `temperature's` ``unit`` to ``'°C'``, so that there's no ambiguity about the chosen temperature scale [#temp_unit]_.
 
@@ -239,4 +239,4 @@ this part of the documentation is for you.
 .. rubric:: Footnotes
 
 .. [#extras] Each predefined asset type maps to a predefined asset :ref:`profile <api-profiles>`, which in turn maps to `AllThingsTalk asset profiles <http://docs.allthingstalk.com/cloud/concepts/assets/profiles/>`_.
-.. [#temp_unit] Defining the temperature scale is of course optional - the platform will work just fine without it. Nevertheless, specifying units for physical measures is a good practice, and as a bonus, we'll be able to see the ``unit`` on the Platform interface.
+.. [#temp_unit] Defining the temperature scale is of course optional - the platform will work just fine without it. Nevertheless, specifying units for physical measures is a good practice, and as a bonsu, we'll be able to see the ``unit`` on the Platform interface.

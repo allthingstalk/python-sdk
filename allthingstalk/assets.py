@@ -33,6 +33,17 @@ class Asset:
 
     def __init__(self, *, kind='sensor', name=None, title=None,
                  description='', handler=None, profile=None, **kwargs):
+        """References the asset identified by name. The asset is created on the platform
+        if it doesn't already exist. If the asset is initialized from a device class,
+        it's default name is set to the member name referencing it.
+
+        :param str kind: Asset kind: sensor, actuator, virtual or config
+        :param str name: Asset's name. If the asset is initialized from a device class, the name defaults to the name of the member referencing the asset, e.g. for ``my_asset = IntegerAsset()``, the integer asset's name will be set to ``'my_asset'``
+        :param str title: Asset's title. By default it gets set to capitalized name.
+        :param str description: Asset's description
+        :param Profile profile: Asset's profile. For default profiles, it's recommend to use Asset variants with preset profile, like IntegerAsset or StringAsset.
+        """
+
         self.id = None
         self.thing_id = None
         self.kind = kind if kind else 'sensor'

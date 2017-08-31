@@ -15,6 +15,8 @@ Assets
 .. autoclass:: Asset
    :members:
 
+   .. automethod:: __init__
+
 .. autoclass:: NumberAsset
    :members:
 
