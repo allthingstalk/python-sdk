@@ -96,7 +96,7 @@ class Client(BaseClient):
             self.mqtt = None
 
         self._devices = {}
-        self._version = self.__get_version()
+        self._version = self._get_version()
 
     def _make_mqtt_client(self, host, port, token):
         def on_mqtt_connect(client, userdata, rc):
@@ -164,8 +164,8 @@ class Client(BaseClient):
             'Profile': asset.profile
         }
         asset_dict = requests.post('%s/device/%s/assets' % (self.http, device_id),
-                                    headers=self._get_headers(),
-                                    json=attalk_asset).json()
+                                   headers=self._get_headers(),
+                                   json=attalk_asset).json()
         return Asset.from_dict(asset_dict)
 
     def get_asset_state(self, device_id, asset_name):
@@ -202,15 +202,15 @@ class Client(BaseClient):
             json_state = {'value': state}
         requests.put('%s/device/%s/asset/%s/state' % (self.http, device_id, asset_name),
                      headers=self._get_headers(),
-                     json = json_state)
+                     json=json_state)
 
     def _get_headers(self):
         return {
             'Authorization': 'Bearer %s' % self.token,
-            'User-Agent': 'ATTalk-PythonSDK/%s' % self.__get_version()
+            'User-Agent': 'ATTalk-PythonSDK/%s' % self._get_version()
         }
 
-    def __get_version(self):
+    def _get_version(self):
         return pkg_resources.require('allthingstalk')[0].version
 
     def __del__(self):
