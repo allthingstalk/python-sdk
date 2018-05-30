@@ -37,3 +37,8 @@ class AccessForbiddenException(Exception):
 class InvalidAssetProfileException(Exception):
     """Invalid asset profile."""
     pass
+
+
+class DeviceCreationException(Exception):
+    """Device couldn't be created."""
+    pass

@@ -106,14 +106,17 @@ class Device(metaclass=DeviceBase):
     Platform device resources."""
 
     def __init__(self, *, client=None, id=None, connect=True,
-                 overwrite_assets=False, **kwargs):
+                 overwrite_assets=False, gateway_id=None, gateway_network_name=None,
+                 activity_enabled=False, **kwargs):
         """Initializes the device
 
         :param Client client: The client used to interface with the platform
         :param str id: Device resource id. If supplied, the device will be mapped to the device resource. If None, an attempt will be made to create the device.
         :param bool connect: If ``True``, the device should connect to the cloud immediately.
         :param bool overwrite_assets: If ``True``, asset mismatch between the Platform and device definition will be resolved by configuring local assets on the Platform. If ``False``, AssetMismatchException will be raised.
-
+        :param str gateway_id: Gateway resource id. If supplied, the device will be attached to this gateway's network.
+        :param str gateway_network_name: The name used to identify the device on the gateway's network. If not provided together with the gateway_id, the name will default to device class name.
+        :param bool activity_enabled: If ``True``, historical data will be retained for this device.
         :raises AssetMismatchException: if asset mismatch is found between the existing asset on the Platform and an asset definition, and overwrite_assets is ``False``
 
         """
@@ -121,7 +124,14 @@ class Device(metaclass=DeviceBase):
         self._connected = False
 
         self.id = id
+        self.gateway_id = gateway_id
+        self.gateway_network_name = gateway_network_name or self.__class__.__name__
+        self.activity_enabled = activity_enabled
         self.client = client
+
+        if gateway_id:
+            self.id = self.client.create_gateway_device(
+                self.gateway_id, self.gateway_network_name, activity_enabled)
 
         self.overwrite_assets = overwrite_assets
         self.assets = {asset._internal_id: copy.copy(asset) for asset in self._assets}

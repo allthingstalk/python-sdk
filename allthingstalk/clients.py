@@ -26,7 +26,8 @@ import requests
 
 from .assets import Asset
 from .asset_state import AssetState
-from .exceptions import AssetStateRetrievalException, AccessForbiddenException
+from .exceptions import (
+    AssetStateRetrievalException, AccessForbiddenException, DeviceCreationException)
 
 logger = logging.getLogger('allthingstalk')
 
@@ -50,6 +51,9 @@ class BaseClient:
 
     def publish_asset_state(self, device_id, asset_name, value):
         raise NotImplementedError('publish_asset_state not implemented')
+
+    def create_gateway_device(self, gateway_id, gateway_network_name):
+        raise NotImplementedError('create_gateway_device not implemented')
 
 
 class Client(BaseClient):
@@ -203,6 +207,24 @@ class Client(BaseClient):
         requests.put('%s/device/%s/asset/%s/state' % (self.http, device_id, asset_name),
                      headers=self._get_headers(),
                      json=json_state)
+
+    def create_gateway_device(self, gateway_id, gateway_network_name, activity_enabled=False):
+        """Creates a new devices, or updates an existing device on the gateway.
+        :param str gateway_id: AllThingsTalk Gateway Identifier
+        :param str gateway_network_name: Name of the device on gateway's network
+        :param bool activity_enabled: If ``True``, historical data will be retained for this device
+
+        :return: Device identifier
+        :rtype: str
+        """
+
+        r = requests.put('%s/gateway/%s/device/%s' % (self.http, gateway_id, gateway_network_name),
+                         headers=self._get_headers(),
+                         json={'activityEnabled': activity_enabled})
+        if r.status_code != 200:
+            raise DeviceCreationException()
+        response_json = r.json()
+        return response_json['id']
 
     def _get_headers(self):
         return {
