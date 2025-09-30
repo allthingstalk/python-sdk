@@ -52,7 +52,6 @@ class DeviceBase(type):
         #
 
         # Message handlers for state / feed / command / event
-
         new_class._handlers = {}
         new_class.state = DeviceBase.HandlerDecoratorCollection(new_class, 'state')
         new_class.feed = DeviceBase.HandlerDecoratorCollection(new_class, 'feed')
@@ -98,7 +97,7 @@ class DeviceBase(type):
             if internal_id in self._assets:
                 return self._assets[internal_id]
             else:
-                return AttributeError
+                raise AttributeError(f"No asset '{internal_id}' found for {self._stream} handlers")
 
 
 class Device(metaclass=DeviceBase):
@@ -183,7 +182,12 @@ class Device(metaclass=DeviceBase):
         self._connected = True
 
     def _on_message(self, stream, asset_name, message):
+        # First try to find the handler with the asset_name
+        handler = None
         if asset_name in self._handlers[stream]:
+            handler = self._handlers[stream][asset_name]
+
+        if handler:
             msg = json.loads(message.decode('utf-8'))
             if isinstance(msg, dict):
                 msg = {k.lower(): v for k, v in msg.items()}
@@ -194,4 +198,5 @@ class Device(metaclass=DeviceBase):
             else:
                 at = datetime.datetime.utcnow()
             value = msg['value']
-            self._handlers[stream][asset_name](self, value, at)
+            handler(self, value, at)
+

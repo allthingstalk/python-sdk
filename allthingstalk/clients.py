@@ -19,7 +19,13 @@
 # limitations under the License.
 
 import logging
-import pkg_resources
+try:
+    from importlib.metadata import version
+except ImportError:
+    # Fallback for older Python versions
+    from pkg_resources import get_distribution
+    def version(package_name):
+        return get_distribution(package_name).version
 
 import paho.mqtt.client as paho_mqtt
 import requests
@@ -57,13 +63,13 @@ class Client(BaseClient):
     Platform, that uses HTTP and MQTT in the background. By default, it
     connects to api.allthingstalk.io."""
 
-    def __init__(self, token, *, api='api.allthingstalk.io', http=None, mqtt=None):
+    def __init__(self, token, *, api='api.allthingstalk.io', http=None, mqtt='default'):
         """Initializes the Client with an AllThingsTalk token, and optional endpoints.
 
         :param str token: AllThingsTalk Token, e.g. a Device Token
         :param str api: AllThingsTalk API endpoint, shared by HTTP & MQTT
         :param str http: AllThingsTalk HTTP endpoint. Resolved from api by default
-        :param str mqtt: AllThingsTalk MQTT endpoint. Resolved from api by default
+        :param str mqtt: AllThingsTalk MQTT endpoint. Resolved from api by default. Set to None to disable MQTT.
         """
 
         self.token = token
@@ -83,14 +89,17 @@ class Client(BaseClient):
             raise ValueError('Either api or http must be set.')
 
         # MQTT Client
-        if mqtt:
+        if mqtt is None:
+            self.mqtt = None
+        elif mqtt == 'default':
+            # Use api endpoint for MQTT
+            host, port = api, '1883'
+            self.mqtt = self._make_mqtt_client(host, port, token)
+        elif mqtt:
             if ':' in mqtt:
                 host, port = mqtt.split(':')[:2]
             else:
                 host, port = mqtt, '1883'
-            self.mqtt = self._make_mqtt_client(host, port, token)
-        elif api:
-            host, port = host, port = api, '1883'
             self.mqtt = self._make_mqtt_client(host, port, token)
         else:
             self.mqtt = None
@@ -99,7 +108,7 @@ class Client(BaseClient):
         self._version = self._get_version()
 
     def _make_mqtt_client(self, host, port, token):
-        def on_mqtt_connect(client, userdata, rc):
+        def on_mqtt_connect(client, userdata, flags, rc):
             logger.debug('MQTT client connected to %s:%s' % (host, port))
 
         def on_mqtt_disconnect(client, userdata, rc):
@@ -211,7 +220,11 @@ class Client(BaseClient):
         }
 
     def _get_version(self):
-        return pkg_resources.require('allthingstalk')[0].version
+        try:
+            return version('allthingstalk')
+        except Exception:
+            # Fallback version if pkg_resources fails
+            return '0.3.0'
 
     def __del__(self):
         try:
