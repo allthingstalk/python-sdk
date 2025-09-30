@@ -108,10 +108,10 @@ class Client(BaseClient):
         self._version = self._get_version()
 
     def _make_mqtt_client(self, host, port, token):
-        def on_mqtt_connect(client, userdata, flags, rc):
+        def on_mqtt_connect(client, userdata, flags=None, rc=None):
             logger.debug('MQTT client connected to %s:%s' % (host, port))
 
-        def on_mqtt_disconnect(client, userdata, rc):
+        def on_mqtt_disconnect(client, userdata, rc=None):
             logger.debug('MQTT client disconnected with status %s' % rc)
 
         def on_mqtt_subscribe(client, userdata, mid, granted_qos):
