@@ -63,7 +63,7 @@ class Client(BaseClient):
     Platform, that uses HTTP and MQTT in the background. By default, it
     connects to api.allthingstalk.io."""
 
-    def __init__(self, token, *, api='api.allthingstalk.io', http=None, mqtt='default'):
+    def __init__(self, token, *, api='api.allthingstalk.io', http=None, mqtt=None):
         """Initializes the Client with an AllThingsTalk token, and optional endpoints.
 
         :param str token: AllThingsTalk Token, e.g. a Device Token
@@ -89,17 +89,14 @@ class Client(BaseClient):
             raise ValueError('Either api or http must be set.')
 
         # MQTT Client
-        if mqtt is None:
-            self.mqtt = None
-        elif mqtt == 'default':
-            # Use api endpoint for MQTT
-            host, port = api, '1883'
-            self.mqtt = self._make_mqtt_client(host, port, token)
-        elif mqtt:
+        if mqtt:
             if ':' in mqtt:
                 host, port = mqtt.split(':')[:2]
             else:
                 host, port = mqtt, '1883'
+            self.mqtt = self._make_mqtt_client(host, port, token)
+        elif api:
+            host, port = api, '1883'
             self.mqtt = self._make_mqtt_client(host, port, token)
         else:
             self.mqtt = None
@@ -124,15 +121,19 @@ class Client(BaseClient):
             _, device_id, _, asset_name, stream = parts
             self._devices[device_id]._on_message(stream, asset_name, message.payload)
 
-        client = paho_mqtt.Client()
-        client.username_pw_set(token, token)
-        client.on_connect = on_mqtt_connect
-        client.on_disconnect = on_mqtt_disconnect
-        client.on_message = on_mqtt_message
-        client.on_subscribe = on_mqtt_subscribe
-        client.connect(host, int(port), 60)
-        client.loop_start()
-        return client
+        try:
+            client = paho_mqtt.Client()
+            client.username_pw_set(token, token)
+            client.on_connect = on_mqtt_connect
+            client.on_disconnect = on_mqtt_disconnect
+            client.on_message = on_mqtt_message
+            client.on_subscribe = on_mqtt_subscribe
+            client.connect(host, int(port), 60)
+            client.loop_start()
+            return client
+        except Exception as e:
+            logger.warning(f'MQTT connection to {host}:{port} failed: {e}')
+            return None
 
     def _attach_device(self, device):
         if self.mqtt:

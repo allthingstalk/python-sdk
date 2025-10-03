@@ -64,12 +64,16 @@ class TestClient:
             assert client.token == mock_token
             assert client.http == "https://custom-http.com"
 
-    def test_client_initialization_no_mqtt(self, mock_token):
-        """Test Client initialization without MQTT"""
-        client = Client(mock_token, mqtt=None)
+    def test_client_initialization_mqtt_fails_gracefully(self, mock_token):
+        """Test Client initialization when MQTT connection fails"""
+        with patch('paho.mqtt.client.Client') as mock_mqtt_client:
+            mock_mqtt_instance = Mock()
+            mock_mqtt_client.return_value = mock_mqtt_instance
+            mock_mqtt_instance.connect.side_effect = Exception("Connection failed")
 
-        assert client.token == mock_token
-        assert client.mqtt is None
+            client = Client(mock_token, api="localhost:8001")
+
+            assert client.mqtt is None  # Should be None due to connection failure
 
     def test_version_detection(self, mock_token):
         """Test version detection mechanism"""
