@@ -19,7 +19,13 @@
 # limitations under the License.
 
 import logging
-import pkg_resources
+try:
+    from importlib.metadata import version
+except ImportError:
+    # Fallback for older Python versions
+    from pkg_resources import get_distribution
+    def version(package_name):
+        return get_distribution(package_name).version
 
 import paho.mqtt.client as paho_mqtt
 import requests
@@ -90,7 +96,7 @@ class Client(BaseClient):
                 host, port = mqtt, '1883'
             self.mqtt = self._make_mqtt_client(host, port, token)
         elif api:
-            host, port = host, port = api, '1883'
+            host, port = api, '1883'
             self.mqtt = self._make_mqtt_client(host, port, token)
         else:
             self.mqtt = None
@@ -99,10 +105,10 @@ class Client(BaseClient):
         self._version = self._get_version()
 
     def _make_mqtt_client(self, host, port, token):
-        def on_mqtt_connect(client, userdata, rc):
+        def on_mqtt_connect(client, userdata, flags=None, rc=None):
             logger.debug('MQTT client connected to %s:%s' % (host, port))
 
-        def on_mqtt_disconnect(client, userdata, rc):
+        def on_mqtt_disconnect(client, userdata, rc=None):
             logger.debug('MQTT client disconnected with status %s' % rc)
 
         def on_mqtt_subscribe(client, userdata, mid, granted_qos):
@@ -115,15 +121,19 @@ class Client(BaseClient):
             _, device_id, _, asset_name, stream = parts
             self._devices[device_id]._on_message(stream, asset_name, message.payload)
 
-        client = paho_mqtt.Client()
-        client.username_pw_set(token, token)
-        client.on_connect = on_mqtt_connect
-        client.on_disconnect = on_mqtt_disconnect
-        client.on_message = on_mqtt_message
-        client.on_subscribe = on_mqtt_subscribe
-        client.connect(host, int(port), 60)
-        client.loop_start()
-        return client
+        try:
+            client = paho_mqtt.Client()
+            client.username_pw_set(token, token)
+            client.on_connect = on_mqtt_connect
+            client.on_disconnect = on_mqtt_disconnect
+            client.on_message = on_mqtt_message
+            client.on_subscribe = on_mqtt_subscribe
+            client.connect(host, int(port), 60)
+            client.loop_start()
+            return client
+        except Exception as e:
+            logger.warning(f'MQTT connection to {host}:{port} failed: {e}')
+            return None
 
     def _attach_device(self, device):
         if self.mqtt:
@@ -211,7 +221,11 @@ class Client(BaseClient):
         }
 
     def _get_version(self):
-        return pkg_resources.require('allthingstalk')[0].version
+        try:
+            return version('allthingstalk')
+        except Exception:
+            # Fallback version if pkg_resources fails
+            return '0.3.0'
 
     def __del__(self):
         try:

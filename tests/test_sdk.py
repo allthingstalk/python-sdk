@@ -1,1 +1,2 @@
-from .context import allthingstalk
+from tests.context import allthingstalk
+

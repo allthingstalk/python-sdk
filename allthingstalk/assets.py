@@ -32,7 +32,7 @@ class Asset:
     _PROFILE_CLASS = None
 
     def __init__(self, *, kind='sensor', name=None, title=None,
-                 description='', handler=None, profile=None, **kwargs):
+                 description=None, handler=None, profile=None, **kwargs):
         """References the asset identified by name. The asset is created on the platform
         if it doesn't already exist. If the asset is initialized from a device class,
         it's default name is set to the member name referencing it.
