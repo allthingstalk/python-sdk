@@ -69,7 +69,7 @@ class Client(BaseClient):
         :param str token: AllThingsTalk Token, e.g. a Device Token
         :param str api: AllThingsTalk API endpoint, shared by HTTP & MQTT
         :param str http: AllThingsTalk HTTP endpoint. Resolved from api by default
-        :param str mqtt: AllThingsTalk MQTT endpoint. Resolved from api by default.
+        :param str mqtt: AllThingsTalk MQTT endpoint. Resolved from api by default
         """
 
         self.token = token
