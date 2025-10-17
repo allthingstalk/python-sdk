@@ -10,6 +10,7 @@ AllThingsTalk Python SDK is a Python 3 library, so make sure you have Python 3 i
 
 ## Installation
 
+
 ### Using pip
 
 The SDK is available on [PyPI](https://pypi.python.org/pypi), and can be installed using `pip3`. If you don't have `pip3` or `python3` installed, please follow the [Python Installation Tutorial](http://docs.python-guide.org/en/latest/starting/installation/).
