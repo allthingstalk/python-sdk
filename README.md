@@ -36,7 +36,7 @@ Or, download the [tarball](https://github.com/allthingstalk/requests/tarball/mas
 curl -OL https://github.com/allthingstalk/requests/tarball/master
 ```
 
-To install the package, use:
+To  install the package, use:
 
 ```
 cd python-sdk
